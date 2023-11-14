@@ -10,7 +10,7 @@
       "address": "jl.indonesia",
       "profilePicture": "https://media.licdn.com/dms/image/C5603AQFdKoZc74rnwA/profile-displayphoto-shrink_800_800/0/1626883365645?e=2147483647&v=beta&t=D5tXW8mAuk6ZNHEsGp7I9Jlu36n-p7u0VTLsdigqm1k",
       "latitude": "",
-      "longtitude": "",
+      "longitude": "",
       "area": ""
     },
     {
@@ -23,7 +23,7 @@
       "address": "jl.indonesia",
       "profilePicture": "https://media.licdn.com/dms/image/C5603AQFdKoZc74rnwA/profile-displayphoto-shrink_800_800/0/1626883365645?e=2147483647&v=beta&t=D5tXW8mAuk6ZNHEsGp7I9Jlu36n-p7u0VTLsdigqm1k",
       "latitude": "",
-      "longtitude": "",
+      "longitude": "",
       "area": ""
     },
     {
@@ -36,7 +36,7 @@
       "address": "jl.indonesia",
       "profilePicture": "https://media.licdn.com/dms/image/C5603AQFdKoZc74rnwA/profile-displayphoto-shrink_800_800/0/1626883365645?e=2147483647&v=beta&t=D5tXW8mAuk6ZNHEsGp7I9Jlu36n-p7u0VTLsdigqm1k",
       "latitude": "",
-      "longtitude": "",
+      "longitude": "",
       "area": ""
     }
   ],
@@ -48,7 +48,7 @@
       "imageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEikdLvYYrJls_oY_h6OyzmWQLijl9qdiMFiKUmEKBWr7O7R4wmo4cwQOG5cIMQzRDT-q9rkENIWYaKIw3GoJ8JFkocS-9a98pA_u9p18521Q6rlNv_7NDs3n2dccSR8QlmPXhQk6mUONSQCTp6SHt0AH7uUBpYiaKkIVUwdB6a216GIM2gRcfWcurpEhA/w1200-h630-p-k-no-nu/Beli%201set%20Peralatan%20Hisana%20Fried%20Chicken%20Modal%20Rp.%203,7%20Juta.jpg",
       "description": "Selamat datang di HISANA disuka destinasi terbaik untuk pencinta ayam goreng yang menginginkan cita rasa istimewa! Toko kami menawarkan pengalaman kuliner yang tak terlupakan dengan menu utama kami yang lezat dan beragam pilihan.",
       "latitude": "",
-      "longtitude": "",
+      "longitude": "",
       "area": "",
       "UserId": 1
     },
@@ -59,7 +59,7 @@
       "imageUrl": "https://asset-2.tstatic.net/travel/foto/bank/images/sate-taican_20170207_185659.jpg",
       "description": "Selamat datang di Kedai Sate Taichan destinasi pilihan bagi para pencinta kuliner yang menginginkan sensasi pedas dan kenikmatan unik dari sate taichan! Toko kami menawarkan pengalaman gastronomi yang tak terlupakan dengan menu utama kami yang lezat dan menggugah selera.",
       "latitude": "",
-      "longtitude": "",
+      "longitude": "",
       "area": "",
       "UserId": 2
     }
@@ -73,7 +73,7 @@
       "description": "Ayam goreng Original dengan tepung rahasia",
       "StoreId": 1,
       "latitude": "",
-      "longtitude": "",
+      "longitude": "",
       "area": ""
     },
     {
@@ -84,7 +84,7 @@
       "description": "Ayam goreng pedas dibalur dengan bubuk paprika dan juga cabai asli",
       "StoreId": 1,
       "latitude": "",
-      "longtitude": "",
+      "longitude": "",
       "area": ""
     },
     {
@@ -95,7 +95,7 @@
       "description": "Ayam goreng crispy yang renyah untuk pecinta crispy",
       "StoreId": 1,
       "latitude": "",
-      "longtitude": "",
+      "longitude": "",
       "area": ""
     },
     {
@@ -106,7 +106,7 @@
       "description": "Sate taichan yang menggunakan full kulit ayam untuk pecinta kulit",
       "StoreId": 2,
       "latitude": "",
-      "longtitude": "",
+      "longitude": "",
       "area": ""
     },
     {
@@ -117,7 +117,7 @@
       "description": "Sate taichan yang menggunakan daging paha ayam agar empuk",
       "StoreId": 2,
       "latitude": "",
-      "longtitude": "",
+      "longitude": "",
       "area": ""
     },
     {
@@ -128,7 +128,7 @@
       "description": "Sate taichan yang dibalur dengan keju mozzarella",
       "StoreId": 2,
       "latitude": "",
-      "longtitude": "",
+      "longitude": "",
       "area": ""
     }
   ]

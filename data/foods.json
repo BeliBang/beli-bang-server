@@ -7,7 +7,7 @@
     "description": "Ayam goreng Original dengan tepung rahasia",
     "StoreId": 1,
     "latitude": "",
-    "longtitude": "",
+    "longitude": "",
     "area": ""
   },
   {
@@ -18,7 +18,7 @@
     "description": "Ayam goreng pedas dibalur dengan bubuk paprika dan juga cabai asli",
     "StoreId": 1,
     "latitude": "",
-    "longtitude": "",
+    "longitude": "",
     "area": ""
   },
   {
@@ -29,7 +29,7 @@
     "description": "Ayam goreng crispy yang renyah untuk pecinta crispy",
     "StoreId": 1,
     "latitude": "",
-    "longtitude": "",
+    "longitude": "",
     "area": ""
   },
   {
@@ -40,7 +40,7 @@
     "description": "Sate taichan yang menggunakan full kulit ayam untuk pecinta kulit",
     "StoreId": 2,
     "latitude": "",
-    "longtitude": "",
+    "longitude": "",
     "area": ""
   },
   {
@@ -51,7 +51,7 @@
     "description": "Sate taichan yang menggunakan daging paha ayam agar empuk",
     "StoreId": 2,
     "latitude": "",
-    "longtitude": "",
+    "longitude": "",
     "area": ""
   },
   {
@@ -62,7 +62,7 @@
     "description": "Sate taichan yang dibalur dengan keju mozzarella",
     "StoreId": 2,
     "latitude": "",
-    "longtitude": "",
+    "longitude": "",
     "area": ""
   }
 ]

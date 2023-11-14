@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.TEXT,
     StoreId: DataTypes.INTEGER,
     latitude: DataTypes.STRING,
-    longtitude: DataTypes.STRING,
+    longitude: DataTypes.STRING,
     area: DataTypes.STRING
   }, {
     sequelize,
