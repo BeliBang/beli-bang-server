@@ -26,6 +26,18 @@ async function errorHandling(error, req, res, next) {
       status = 401;
       message = "Invalid token"
       break;
+    case "SellerAuthorization":
+      status = 403;
+      message = "Not a seller"
+      break;
+    case "OwnerAuthorization":
+      status = 403;
+      message = "Not thr owner"
+      break;
+    case "NotFound":
+      status = 404;
+      message = "Data not found"
+      break;
   }
 
   res.status(status).json({ message });
