@@ -35,7 +35,7 @@ class storeControllers {
       const { name, imageUrl, description } = req.body
 
       const store = await Store.create({name, imageUrl, description, UserId: req.user.id})
-
+      
 
       
     } catch (error) {
