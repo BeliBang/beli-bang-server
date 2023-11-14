@@ -15,11 +15,11 @@ module.exports = (sequelize, DataTypes) => {
   }
   Food.init({
     name: DataTypes.STRING,
-    imageUrl: DataTypes.STRING,
+    imageUrl: DataTypes.TEXT,
     price: DataTypes.INTEGER,
     description: DataTypes.TEXT,
     StoreId: DataTypes.INTEGER,
-    latitute: DataTypes.STRING,
+    latitude: DataTypes.STRING,
     longtitude: DataTypes.STRING,
     area: DataTypes.STRING
   }, {

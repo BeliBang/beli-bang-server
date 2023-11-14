@@ -15,7 +15,7 @@ module.exports = {
       },
       imageUrl: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       price: {
         allowNull: false,
@@ -35,7 +35,7 @@ module.exports = {
         onDelete: "cascade",
         onUpdate: "cascade",
       },
-      latitute: {
+      latitude: {
         type: Sequelize.STRING
       },
       longtitude: {
