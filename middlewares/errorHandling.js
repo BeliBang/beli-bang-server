@@ -8,9 +8,23 @@ async function errorHandling(error, req, res, next) {
       status = 400;
       message = error.errors[0].message;
       break;
+    case "EmailNull":
+      status = 400;
+      message = "Email is required"
+      break;
+    case "PasswordNull":
+      status = 400;
+      message = "Password is required"
+      break;
+    case "EmailInvalid":
+    case "PasswordInvalid":
+      status = 400;
+      message = "Invalid email / password"
+      break;
+    case "Unauthenticated":
     case "JsonWebTokenError":
       status = 401;
-      message = "Invalid token";
+      message = "Invalid token"
       break;
   }
 

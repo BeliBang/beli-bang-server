@@ -34,10 +34,10 @@ module.exports = {
       profilePicture: {
         type: Sequelize.TEXT
       },
-      latitute: {
+      latitude: {
         type: Sequelize.STRING
       },
-      longtitude: {
+      longitude: {
         type: Sequelize.STRING
       },
       area: {
