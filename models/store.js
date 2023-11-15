@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Store.hasMany(models.Food)
+      Store.hasMany(models.Order)
       Store.belongsTo(models.User)
     }
   }
