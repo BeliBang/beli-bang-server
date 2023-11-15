@@ -1,6 +1,6 @@
-const { hashPassword, comparePassword } = require('../helpers/bcrypt')
+const { comparePassword } = require('../helpers/bcrypt')
 const { signToken } = require('../helpers/jwt')
-const { User, Store } = require('../models')
+const { User } = require('../models')
 
 class userControllers {
   static async register(req, res, next) {
@@ -9,7 +9,7 @@ class userControllers {
       const { username, email, password, role, phoneNumber, address, profilePicture } = req.body
 
       const user = await User.create({ username, email, password, role, phoneNumber, address, profilePicture })
-      res.status(201).json({ username: user.username })
+      res.status(201).json("Success creating account")
     } catch (error) {
       next(error)
     }

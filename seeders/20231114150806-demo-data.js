@@ -30,11 +30,11 @@ module.exports = {
 
     await queryInterface.bulkInsert("Users", dataUsers);
     await queryInterface.bulkInsert("Stores", dataStores);
-    await queryInterface.bulkInsert("Foods", dataFoods);
+    await queryInterface.bulkInsert("Food", dataFoods);
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete("Foods", null, {
+    await queryInterface.bulkDelete("Food", null, {
       restartIdentity: true,
       truncate: true,
       cascade: true,
