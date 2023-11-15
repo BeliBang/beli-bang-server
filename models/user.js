@@ -16,13 +16,93 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   User.init({
-    username: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    role: DataTypes.STRING,
-    phoneNumber: DataTypes.STRING,
-    address: DataTypes.TEXT,
-    profilePicture: DataTypes.TEXT,
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Username is required",
+        },
+        notNull: {
+          msg: "Username is required",
+        },
+      },
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: {
+        args: true,
+        msg: "Email must be unique",
+      },
+      validate: {
+        notEmpty: {
+          msg: "Email is required",
+        },
+        notNull: {
+          msg: "Email is required",
+        },
+        isEmail: {
+          msg: "Invalid email format",
+        },
+      },
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Password is required",
+        },
+        notNull: {
+          msg: "Password is required",
+        },
+        len: {
+          args: [5, 20],
+          msg: "Minimum password is 5 characters and maximum 12 characters",
+        },
+      },
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Role is required",
+        },
+        notNull: {
+          msg: "Role is required",
+        },
+      },
+    },
+    phoneNumber: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Phone Number is required",
+        },
+        notNull: {
+          msg: "Phone Number is required",
+        },
+      },
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Address is required",
+        },
+        notNull: {
+          msg: "Address is required",
+        },
+      },
+    },
+    profilePicture: {
+      type: DataTypes.TEXT,
+      defaultValue: "https://www.mmm.ucar.edu/sites/default/files/img/default-avatar.jpg"
+    },
     latitude: DataTypes.STRING,
     longitude: DataTypes.STRING,
     area: DataTypes.STRING

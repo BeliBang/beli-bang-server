@@ -7,7 +7,7 @@ async function authentication(req, res, next) {
 
     const user = await User.findByPk(payload.id)
     if (!user) {
-        throw { name: "Unauthenticated" }
+      throw { status: 401, message: "Invalid token" };
     }
     req.user = { id: user.id, role: user.role}
     next()

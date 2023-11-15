@@ -1,47 +1,54 @@
-const { comparePassword } = require('../helpers/bcrypt')
-const { signToken } = require('../helpers/jwt')
-const { User } = require('../models')
+const { comparePassword } = require("../helpers/bcrypt");
+const { signToken } = require("../helpers/jwt");
+const { User } = require("../models");
 
 class userControllers {
   static async register(req, res, next) {
     try {
-      console.log(req.body)
-      const { username, email, password, role, phoneNumber, address, profilePicture } = req.body
+      const { username, email, password, role, phoneNumber, address, profilePicture } =
+        req.body;
 
-      const user = await User.create({ username, email, password, role, phoneNumber, address, profilePicture })
-      res.status(201).json("Success creating account")
+      await User.create({
+        username,
+        email,
+        password,
+        role,
+        phoneNumber,
+        address,
+        profilePicture,
+      });
+      res.status(201).json("Success register account");
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
   static async login(req, res, next) {
     try {
-      console.log(req.body)
-      const { email, password } = req.body
-
+      const { email, password } = req.body;
+      console.log(req.body);
       if (!email) {
-        throw { name: 'EmailNull' }
+        throw { status: 400, message: "Email is required" };
       }
       if (!password) {
-        throw { name: 'PasswordNull' }
+        throw { status: 400, message: "Password is required" };
       }
+
       const user = await User.findOne({
-        where: { email }
-      })
-      if (!user) {
-        throw { name: 'EmailInvalid' }
+        where: { email },
+      });
+
+      if (!user || !comparePassword(password, user.password)) {
+        throw { status: 401, message: "Invalid email/password" };
       }
-      const validatePassword = comparePassword(password, user.password)
-      if (!validatePassword) {
-        throw { name: 'PasswordInvalid' }
-      }
-      const token = signToken({ id: user.id, email: user.email })
-      res.status(200).json({ access_token: token, username: user.username, role: user.role })
+
+      const access_token = signToken({ id: user.id, email: user.email });
+      res.status(200).json({ access_token, username: user.username, role: user.role });
     } catch (error) {
-      next(error)
+      console.log(error);
+      next(error);
     }
   }
 }
 
-module.exports = userControllers
+module.exports = userControllers;
