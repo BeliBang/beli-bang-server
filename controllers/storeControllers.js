@@ -1,4 +1,4 @@
-const { User, Store, RatingStore, Food, RatingFood, sequelize } = require('../models')
+const { Store, RatingStore, Food, RatingFood } = require('../models')
 
 class storeControllers {
   static async showStores(req, res, next) {
@@ -9,7 +9,6 @@ class storeControllers {
       })
       res.status(200).json(stores)
     } catch (error) {
-      console.log(error)
       next (error)
     }
   }

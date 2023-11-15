@@ -32,7 +32,7 @@ async function errorHandling(error, req, res, next) {
       break;
     case "OwnerAuthorization":
       status = 403;
-      message = "Not thr owner"
+      message = "Not the owner"
       break;
     case "NotFound":
       status = 404;
