@@ -15,7 +15,7 @@ class storeControllers {
       });
       res.status(200).json(stores);
     } catch (error) {
-      next (error)
+      next(error);
     }
   }
 
