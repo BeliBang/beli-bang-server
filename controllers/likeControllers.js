@@ -16,7 +16,6 @@ class likeControllers {
 
   static async createLike(req, res, next) {
     try {
-      console.log('ADD LIKE')
       const { storeId } = req.params
 
       const checker = await Like.findOne({
