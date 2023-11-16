@@ -16,10 +16,43 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Store.init({
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Name is required",
+        },
+        notNull: {
+          msg: "Name is required",
+        },
+      },
+    },
     status: DataTypes.BOOLEAN,
-    imageUrl: DataTypes.TEXT,
-    description: DataTypes.TEXT,
+    imageUrl: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Image is required",
+        },
+        notNull: {
+          msg: "Image is required",
+        },
+      },
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Description is required",
+        },
+        notNull: {
+          msg: "Description is required",
+        },
+      },
+    },
     latitude: DataTypes.STRING,
     longitude: DataTypes.STRING,
     area: DataTypes.STRING,
