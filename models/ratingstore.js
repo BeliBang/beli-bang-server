@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      
+      RatingStore.belongsTo(models.User)
+      RatingStore.belongsTo(models.Store)
     }
   }
   RatingStore.init({
