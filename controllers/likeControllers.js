@@ -16,7 +16,6 @@ class likeControllers {
 
   static async createLike(req, res, next) {
     try {
-      console.log('ADD LIKE')
       const { storeId } = req.params
 
       const checker = await Like.findOne({
@@ -35,7 +34,15 @@ class likeControllers {
   static async deleteLike(req, res, next) {
     try {
       const { id } = req.params
+
+      const likes = await Like.findByPk(id)
+      if (!likes) {
+        throw { status: 404, message: "Likes data not found"}
+      } else if (likes.UserId != req.user.id) {
+        throw { status: 403, message: "Not authorized" }
+      }
       await Like.destroy({where: { id } })
+      
       res.status(200).json("Like has been removed")
     } catch (error) {
       next (error)
