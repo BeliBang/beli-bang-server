@@ -1,26 +1,41 @@
 const { comparePassword } = require("../helpers/bcrypt");
+const imageKit = require("../helpers/imageKit");
 const { signToken } = require("../helpers/jwt");
 const { User } = require("../models");
 
 class userControllers {
   static async register(req, res, next) {
     try {
-      const { username, email, password, role, phoneNumber, address, profilePicture } =
-        req.body;
+      const { username, email, password, role, phoneNumber, address } = req.body;
 
-      const user = await User.create({
-        username,
-        email,
-        password,
-        role,
-        phoneNumber,
-        address,
-        profilePicture,
-      });
+      await imageKit.upload(
+        {
+          file: req.file.buffer.toString("base64"),
+          fileName: `${Date.now()}_${req.file.originalname}`,
+          folder: "BB_User",
+          useUniqueFileName: false,
+        },
+        async function (err, fileResponse) {
+          if (err) {
+            return res.status(500).json({
+              message: "Error occured during photo upload. Please try again.",
+            });
+          }
 
-      const access_token = signToken({ id: user.id, email: user.email });
+          const user = await User.create({
+            username,
+            email,
+            password,
+            role,
+            phoneNumber,
+            address,
+            profilePicture: fileResponse.url,
+          });
+          const access_token = signToken({ id: user.id, email: user.email });
 
-      res.status(201).json({ access_token, role: user.role });
+          res.status(201).json({ access_token, role: user.role });
+        }
+      );
     } catch (error) {
       next(error);
     }
