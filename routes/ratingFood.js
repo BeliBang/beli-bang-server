@@ -2,8 +2,8 @@ const express = require("express");
 const ratingFoodControllers = require("../controllers/ratingFoodControllers");
 const router = express.Router();
 
-router.get("/ratingfood/:foodId", ratingFoodControllers.findRating);
-router.post("/ratingfood/:foodId", ratingFoodControllers.createRating);
-router.delete("/ratingfood/:id", ratingFoodControllers.deleteRating);
+router.get("/foods/rating/:foodId", ratingFoodControllers.findRating);
+router.post("/foods/rating/:foodId", ratingFoodControllers.createRating);
+router.delete("/foods/rating/:id", ratingFoodControllers.deleteRating);
 
 module.exports = router;

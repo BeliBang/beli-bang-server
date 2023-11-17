@@ -9,7 +9,7 @@ class storeControllers {
         include: [
           {
             model: User,
-            attributes: { exclude: ["createdAt", "updatedAt"] },
+            attributes: { exclude: ["createdAt", "updatedAt", "password"] },
           },
         ],
       });
@@ -31,7 +31,7 @@ class storeControllers {
           },
           {
             model: User,
-            attributes: { exclude: ["createdAt", "updatedAt"] },
+            attributes: { exclude: ["createdAt", "updatedAt", "password"] },
           },
         ],
       });
@@ -49,7 +49,7 @@ class storeControllers {
       const { name, imageUrl, description } = req.body;
 
       await Store.create({ name, imageUrl, description, UserId: req.user.id });
-      res.status(201).json("Success create store");
+      res.status(201).json({ message: "Success create store" });
     } catch (error) {
       next(error);
     }
@@ -57,13 +57,14 @@ class storeControllers {
 
   static async updateStore(req, res, next) {
     try {
+      console.log(req.params.id);
       const { name, imageUrl, description } = req.body;
-
+      console.log({ name });
       await Store.update(
         { name, imageUrl, description },
         { where: { id: req.params.id } }
       );
-      res.status(200).json("Success updating store information");
+      res.status(200).json({ message: "Success updating store information" });
     } catch (error) {
       next(error);
     }
@@ -72,7 +73,7 @@ class storeControllers {
   static async deleteStore(req, res, next) {
     try {
       await Store.destroy({ where: { id: req.params.id } });
-      res.status(200).json("Store has been deleted");
+      res.status(200).json({ message: "Store has been deleted" });
     } catch (error) {
       next(error);
     }

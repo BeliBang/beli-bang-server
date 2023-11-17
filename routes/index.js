@@ -11,7 +11,9 @@ const ratingStoreRouter = require("./ratingStore")
 const ratingFoodRouter = require("./ratingFood")
 
 router.use(userRouter)
+
 router.use(authentication)
+
 router.use(storeRouter)
 router.use(foodRouter)
 router.use(orderRouter)

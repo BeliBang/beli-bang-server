@@ -8,7 +8,7 @@ class userControllers {
       const { username, email, password, role, phoneNumber, address, profilePicture } =
         req.body;
 
-      await User.create({
+      const user = await User.create({
         username,
         email,
         password,
@@ -17,7 +17,10 @@ class userControllers {
         address,
         profilePicture,
       });
-      res.status(201).json("Success register account");
+
+      const access_token = signToken({ id: user.id, email: user.email });
+
+      res.status(201).json({ access_token, role: user.role });
     } catch (error) {
       next(error);
     }
@@ -26,7 +29,6 @@ class userControllers {
   static async login(req, res, next) {
     try {
       const { email, password } = req.body;
-      console.log(req.body);
       if (!email) {
         throw { status: 400, message: "Email is required" };
       }
