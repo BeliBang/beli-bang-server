@@ -1,4 +1,5 @@
 const { User, Store, RatingStore, Food, RatingFood, sequelize } = require("../models");
+const imageKit = require("../helpers/imageKit");
 
 class storeControllers {
   static async showStores(req, res, next) {
@@ -46,10 +47,23 @@ class storeControllers {
 
   static async createStore(req, res, next) {
     try {
-      const { name, imageUrl, description } = req.body;
+      const { name, description } = req.body;
 
-      await Store.create({ name, imageUrl, description, UserId: req.user.id });
-      res.status(201).json("Success create store");
+      await imageKit.upload({
+        file: req.file.buffer.toString('base64'),
+        fileName: `${Date.now()}_${req.file.originalname}`,
+        folder: 'BB_Store',
+        useUniqueFileName: false
+      }, async function (err, fileResponse) {
+        if(err) {
+          return res.status(500).json({
+            message: "Error occured during photo upload. Please try again."
+          })
+        }
+
+        await Store.create({ name, imageUrl: fileResponse.url, description, UserId: req.user.id });
+        res.status(201).json({ message: "Success create store"});
+      })
     } catch (error) {
       next(error);
     }

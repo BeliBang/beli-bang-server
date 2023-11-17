@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "postgres",
-    "password": "posgtres",
+    "password": "sapi",
     "database": "beli-bang-server",
     "host": "127.0.0.1",
     "dialect": "postgres"

@@ -1,3 +1,4 @@
+const imageKit = require('../helpers/imageKit')
 const { Food, RatingFood } = require('../models')
 
 class foodControllers {
@@ -18,10 +19,24 @@ class foodControllers {
   static async createFood(req, res, next) {
     try {
       console.log(req.body)
-      const { name, imageUrl, price, description, StoreId } = req.body
+      const { name, price, description, StoreId } = req.body
 
-      await Food.create({name, imageUrl, price, description, StoreId})
-      res.status(201).json("Success adding new food")
+      await imageKit.upload({
+        file: req.file.buffer.toString('base64'),
+        fileName: `${Date.now()}_${req.file.originalname}`,
+        folder: 'BB_Food',
+        useUniqueFileName: false
+      }, async function (err, fileResponse) {
+        if(err) {
+          return res.status(500).json({
+            message: "Error occured during photo upload. Please try again."
+          })
+        }
+
+        await Food.create({ name, imageUrl: fileResponse.url, price, description, StoreId })
+        res.status(201).json({ message: "Success adding new food"});
+      })
+
     } catch (error) {
       next (error)
     }
