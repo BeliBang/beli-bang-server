@@ -1,6 +1,6 @@
 'use strict';
 const {
-  Model
+  Model, DatabaseError
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class RatingStore extends Model {
@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   RatingStore.init({
     StoreId: DataTypes.INTEGER,
-    UserId: DataTypes.INTEGER
+    UserId: DataTypes.INTEGER,
+    score: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'RatingStore',

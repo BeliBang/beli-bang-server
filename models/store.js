@@ -55,9 +55,6 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
     },
-    latitude: DataTypes.STRING,
-    longitude: DataTypes.STRING,
-    area: DataTypes.STRING,
     UserId: DataTypes.INTEGER
   }, {
     sequelize,

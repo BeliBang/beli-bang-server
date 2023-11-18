@@ -25,15 +25,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.TEXT
       },
-      latitude: {
-        type: Sequelize.STRING
-      },
-      longitude: {
-        type: Sequelize.STRING
-      },
-      area: {
-        type: Sequelize.STRING
-      },
       UserId: {
         allowNull: false,
         type: Sequelize.INTEGER,

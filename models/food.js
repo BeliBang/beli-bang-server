@@ -64,9 +64,6 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     StoreId: DataTypes.INTEGER,
-    latitude: DataTypes.STRING,
-    longitude: DataTypes.STRING,
-    area: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Food',

@@ -34,14 +34,8 @@ module.exports = {
       profilePicture: {
         type: Sequelize.TEXT
       },
-      latitude: {
-        type: Sequelize.STRING
-      },
-      longitude: {
-        type: Sequelize.STRING
-      },
-      area: {
-        type: Sequelize.STRING
+      location: {
+        type: Sequelize.GEOMETRY('POINT'),
       },
       createdAt: {
         allowNull: false,
