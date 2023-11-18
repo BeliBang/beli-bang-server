@@ -7,6 +7,7 @@ class storeControllers {
       // Filter by Location, order ASC
       const stores = await Store.findAll({
         attributes: { exclude: ["createdAt", "updatedAt"] },
+        where: { status: true },
         include: [
           {
             model: User,
