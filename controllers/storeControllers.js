@@ -47,6 +47,32 @@ class storeControllers {
     }
   }
 
+  static async findStoreUser(req, res, next) {
+    try {
+      const UserId = req.user.id;
+      const storeSeller = await Store.findOne({
+        where: { UserId },
+        attributes: { exclude: ['createdAt', 'updatedAt'] },
+        include: [
+          {
+            model: Food,
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
+          },
+          {
+            model: User,
+            attributes: { exclude: ['createdAt', 'updatedAt', 'password'] },
+          },
+        ],
+      });
+      if (!storeSeller) {
+        throw { status: 404, message: 'Store Not Found' };
+      }
+      res.status(200).json(storeSeller);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async createStore(req, res, next) {
     try {
       const { name, description } = req.body;
@@ -65,7 +91,12 @@ class storeControllers {
             });
           }
 
-          await Store.create({ name, imageUrl: fileResponse.url, description, UserId: req.user.id });
+          await Store.create({
+            name,
+            imageUrl: fileResponse.url,
+            description,
+            UserId: req.user.id,
+          });
           res.status(201).json({ message: 'Success create store' });
         }
       );
