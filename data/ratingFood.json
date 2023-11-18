@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "FoodId": 1,
+    "UserId": 3,
+    "status": 4
+  },
+  {
+    "id": 2,
+    "FoodId": 1,
+    "UserId": 3,
+    "status": 5
+  },
+  {
+    "id": 3,
+    "FoodId": 3,
+    "UserId": 3,
+    "status": 4
+  },
+  {
+    "id": 4,
+    "FoodId": 4,
+    "UserId": 3,
+    "status": 5
+  },
+  {
+    "id": 5,
+    "FoodId": 5,
+    "UserId": 3,
+    "status": 5
+  },
+  {
+    "id": 6,
+    "FoodId": 6,
+    "UserId": 3,
+    "status": 4
+  },
+  {
+    "id": 7,
+    "FoodId": 6,
+    "UserId": 3,
+    "status": 3
+  }
+]

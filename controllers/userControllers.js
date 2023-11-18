@@ -60,7 +60,9 @@ class userControllers {
         throw { status: 404, message: "User Not Found" };
       }
       res.status(200).json(user);
-    } catch (error) {}
+    } catch (error) {
+      next(error)
+    }
   }
 
   static async editProfilePicture(req, res, next) {
