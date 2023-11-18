@@ -12,6 +12,14 @@ module.exports = {
     const dataUsers = users.map((el) => {
       delete el.id;
       el.password = hashPassword(el.password);
+      el.profilePicture =
+        "https://www.mmm.ucar.edu/sites/default/files/img/default-avatar.jpg";
+      if ((el.role == "Seller")) {
+        el.location = Sequelize.fn(
+          "ST_GeomFromText",
+          "POINT(107.59278847659893 -6.942981263106864)"
+        );
+      }
       el.createdAt = el.updatedAt = new Date();
       return el;
     });

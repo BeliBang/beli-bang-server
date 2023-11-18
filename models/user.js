@@ -107,9 +107,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       defaultValue: "https://www.mmm.ucar.edu/sites/default/files/img/default-avatar.jpg"
     },
-    latitude: DataTypes.STRING,
-    longitude: DataTypes.STRING,
-    area: DataTypes.STRING
+    location: DataTypes.GEOMETRY('POINT'),
   }, {
     sequelize,
     modelName: 'User',

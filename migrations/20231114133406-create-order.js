@@ -29,9 +29,6 @@ module.exports = {
         onDelete: "cascade",
         onUpdate: "cascade",
       },
-      notes: {
-        type: Sequelize.STRING,
-      },
       status: {
         type: Sequelize.STRING,
       },

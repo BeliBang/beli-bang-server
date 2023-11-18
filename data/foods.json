@@ -5,10 +5,7 @@
     "imageUrl": "https://live.staticflickr.com/65535/51364535374_64b9889b7d_b.jpg",
     "price": 15000,
     "description": "Ayam goreng Original dengan tepung rahasia",
-    "StoreId": 1,
-    "latitude": "",
-    "longitude": "",
-    "area": ""
+    "StoreId": 1
   },
   {
     "id": 2,
@@ -16,10 +13,7 @@
     "imageUrl": "https://www.seriouseats.com/thmb/Efkd6pn1nhg5V5Jkpv2ns_UunlE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__images__2015__07__20150715-fried-chicken-01-6a95e8ae820a4ee4af40e05a9fc4e7e7.jpg",
     "price": 17000,
     "description": "Ayam goreng pedas dibalur dengan bubuk paprika dan juga cabai asli",
-    "StoreId": 1,
-    "latitude": "",
-    "longitude": "",
-    "area": ""
+    "StoreId": 1
   },
   {
     "id": 3,
@@ -27,10 +21,7 @@
     "imageUrl": "https://static.toiimg.com/thumb/61589069.cms?imgsize=788682&width=800&height=800",
     "price": 15000,
     "description": "Ayam goreng crispy yang renyah untuk pecinta crispy",
-    "StoreId": 1,
-    "latitude": "",
-    "longitude": "",
-    "area": ""
+    "StoreId": 1
   },
   {
     "id": 4,
@@ -38,10 +29,7 @@
     "imageUrl": "https://www.satetaichangoreng.com/images/s5.png",
     "price": 18000,
     "description": "Sate taichan yang menggunakan full kulit ayam untuk pecinta kulit",
-    "StoreId": 2,
-    "latitude": "",
-    "longitude": "",
-    "area": ""
+    "StoreId": 2
   },
   {
     "id": 5,
@@ -49,10 +37,7 @@
     "imageUrl": "https://www.satetaichangoreng.com/images/s1.png",
     "price": 19000,
     "description": "Sate taichan yang menggunakan daging paha ayam agar empuk",
-    "StoreId": 2,
-    "latitude": "",
-    "longitude": "",
-    "area": ""
+    "StoreId": 2
   },
   {
     "id": 6,
@@ -60,9 +45,6 @@
     "imageUrl": "https://www.satetaichangoreng.com/images/taichanm.jpg",
     "price": 23000,
     "description": "Sate taichan yang dibalur dengan keju mozzarella",
-    "StoreId": 2,
-    "latitude": "",
-    "longitude": "",
-    "area": ""
+    "StoreId": 2
   }
 ]

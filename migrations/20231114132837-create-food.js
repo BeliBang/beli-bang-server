@@ -35,15 +35,6 @@ module.exports = {
         onDelete: "cascade",
         onUpdate: "cascade",
       },
-      latitude: {
-        type: Sequelize.STRING
-      },
-      longitude: {
-        type: Sequelize.STRING
-      },
-      area: {
-        type: Sequelize.STRING
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
