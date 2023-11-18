@@ -7,6 +7,7 @@ class storeControllers {
       // Filter by Location, order ASC
       const stores = await Store.findAll({
         attributes: { exclude: ["createdAt", "updatedAt"] },
+        where: { status: true },
         include: [
           {
             model: User,
@@ -45,25 +46,75 @@ class storeControllers {
     }
   }
 
+  static async findStoreUser(req, res, next) {
+    try {
+      const UserId = req.user.id;
+      const storeSeller = await Store.findOne({
+        where: { UserId },
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+        include: [
+          {
+            model: Food,
+            attributes: { exclude: ["createdAt", "updatedAt"] },
+          },
+          {
+            model: User,
+            attributes: { exclude: ["createdAt", "updatedAt", "password"] },
+          },
+        ],
+      });
+      if (!storeSeller) {
+        throw { status: 404, message: "Store Not Found" };
+      }
+      res.status(200).json(storeSeller);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async createStore(req, res, next) {
     try {
       const { name, description } = req.body;
 
-      await imageKit.upload({
-        file: req.file.buffer.toString('base64'),
-        fileName: `${Date.now()}_${req.file.originalname}`,
-        folder: 'BB_Store',
-        useUniqueFileName: false
-      }, async function (err, fileResponse) {
-        if(err) {
-          return res.status(500).json({
-            message: "Error occured during photo upload. Please try again."
-          })
-        }
+      const store = await Store.findOne({ where: { UserId: req.user.id } });
+      if (store) {
+        throw { status: 401, message: "You already have a store" };
+      }
 
-        await Store.create({ name, imageUrl: fileResponse.url, description, UserId: req.user.id });
-        res.status(201).json({ message: "Success create store"});
-      })
+      if (!req.file) {
+        throw { status: 400, message: "Image store is required" };
+      }
+
+      if (!name) {
+        throw { status: 400, message: "Name is required" };
+      }
+      if (!description) {
+        throw { status: 400, message: "Description is required" };
+      }
+
+      await imageKit.upload(
+        {
+          file: req.file.buffer.toString("base64"),
+          fileName: `${Date.now()}_${req.file.originalname}`,
+          folder: "BB_Store",
+          useUniqueFileName: false,
+        },
+        async function (err, fileResponse) {
+          if (err) {
+            return res.status(500).json({
+              message: "Error occured during photo upload. Please try again.",
+            });
+          }
+
+          await Store.create({
+            name,
+            imageUrl: fileResponse.url,
+            description,
+            UserId: req.user.id,
+          });
+          res.status(201).json({ message: "Success create store" });
+        }
+      );
     } catch (error) {
       next(error);
     }
