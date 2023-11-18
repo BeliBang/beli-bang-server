@@ -19,7 +19,7 @@ class userControllers {
       });
       const access_token = signToken({ id: user.id, email: user.email });
 
-      res.status(201).json({ access_token, role: user.role });
+      res.status(201).json({ access_token, role: user.role, id: user.id });
     } catch (error) {
       next(error);
     }
