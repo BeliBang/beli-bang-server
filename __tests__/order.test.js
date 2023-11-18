@@ -35,7 +35,7 @@ const dataStore = {
 const dataOrder = {
   // StoreId: 1,
   // UserId: 2,
-  status: "done"
+  status: "Success"
 }
 
 beforeAll((done) => {
@@ -299,13 +299,13 @@ describe("PUT /orders/:id", () => {
   test("200 success UPDATE Order by ID", (done) => {
     request(app)
       .put(`/orders/${orderId}`)
-      .set("access_token", validCustomerToken)
-      .send(dataOrder)
+      .set("access_token", validSellerToken)
+      .send({ status: 'Success'})
       .then((response) => {
         const { body, status } = response
 
-        expect(status).toBe(201)
-        expect(body).toHaveProperty("message", "Success creating order");
+        expect(status).toBe(200)
+        expect(body).toHaveProperty("message", "Success updating order status");
         done()
       })
       .catch((err) => {
@@ -313,30 +313,11 @@ describe("PUT /orders/:id", () => {
       })
   })
 
-  test("400 post Order without StoreId", (done) => {
+  test("401 update Order with invalid token", (done) => {
     request(app)
-      .post("/orders")
-      .set("access_token", validCustomerToken)
-      .send({
-        UserId: dataOrder.UserId
-      })
-      .then((response) => {
-        const { body, status } = response
- 
-        expect(status).toBe(400)
-        expect(body).toHaveProperty("message", "Store ID is required")
-        done()
-      })
-      .catch((err) => {
-        done(err)
-      })
-  })
-
-  test("401 post Order with invalid token", (done) => {
-    request(app)
-      .post("/orders")
+    .put(`/orders/${orderId}`)
       .set("access_token", invalidToken)
-      .send(dataOrder)
+      .send({ status: 'Success'})
       .then((response) => {
         const { body, status } = response
 
@@ -349,15 +330,49 @@ describe("PUT /orders/:id", () => {
       })
   })
   
-  test("401 post Order without token", (done) => {
+  test("401 update Order without token", (done) => {
     request(app)
-      .post("/orders")
-      .send(dataOrder)
+      .put(`/orders/${orderId}`)
+      .send({ status: 'Success'})
       .then((response) => {
         const { body, status } = response
 
         expect(status).toBe(401);
         expect(body).toHaveProperty("message", "Invalid token")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+  
+  test("403 update Order without Seller role", (done) => {
+    request(app)
+      .put(`/orders/${orderId}`)
+      .set("access_token", validCustomerToken)
+      .send({ status: 'Success'})
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(403);
+        expect(body).toHaveProperty("message", "Forbidden for the seller")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+  
+  test("404 update Order not in Database", (done) => {
+    request(app)
+      .put("/orders/99")
+      .set("access_token", validSellerToken)
+      .send({ status: 'Success'})
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(404);
+        expect(body).toHaveProperty("message", "Order Not Found")
         done()
       })
       .catch((err) => {
@@ -384,7 +399,7 @@ describe("DELETE /orders/:id", () => {
       })
   })
 
-  test("401 get Order with invalid token", (done) => {
+  test("401 delete Order with invalid token", (done) => {
     request(app)
       .delete(`/orders/${orderId}`)
       .set("access_token", invalidToken)
@@ -400,7 +415,7 @@ describe("DELETE /orders/:id", () => {
       })
   })
   
-  test("401 get Order without token", (done) => {
+  test("401 delete Order without token", (done) => {
     request(app)
       .delete(`/orders/${orderId}`)
       .then((response) => {
@@ -415,7 +430,7 @@ describe("DELETE /orders/:id", () => {
       })
   })
 
-  test("404 get Order not in database", (done) => {
+  test("404 delete Order not in database", (done) => {
     request(app)
       .delete("/orders/99")
       .set("access_token", validCustomerToken)

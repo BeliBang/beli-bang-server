@@ -46,10 +46,15 @@ class orderControllers {
       console.log(req.body)
       const { status } = req.body
 
+      const order = await Order.findByPk(req.params.id)
+      if (!order) {
+        throw { status: 404, message: "Order Not Found" }
+      }
+
       await Order.update({status},
         {where: {id: req.params.id} } 
       )
-      res.status(200).json("Success updating order status")
+      res.status(200).json({ message: "Success updating order status" })
     } catch (error) {
       next (error)
     }
@@ -57,6 +62,10 @@ class orderControllers {
 
   static async deleteOrder(req, res, next) {
     try {
+      const order = await Order.findByPk(req.params.id)
+      if (!order) {
+        throw { status: 404, message: "Order Not Found" }
+      }
       await Order.destroy({where: {id: req.params.id} })
       res.status(200).json({ message: "Order has been deleted" })
     } catch (error) {
