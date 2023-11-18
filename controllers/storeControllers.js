@@ -7,6 +7,7 @@ class storeControllers {
       // Filter by Location, order ASC
       const stores = await Store.findAll({
         attributes: { exclude: ['createdAt', 'updatedAt'] },
+        where: { status: true },
         include: [
           {
             model: User,
@@ -79,18 +80,18 @@ class storeControllers {
 
       const store = await Store.findOne({ where: { UserId: req.user.id } });
       if (store) {
-        throw { status: 401, message: "You already have a store" };
+        throw { status: 401, message: 'You already have a store' };
       }
 
       if (!req.file) {
-        throw { status: 400, message: "Image store is required" };
+        throw { status: 400, message: 'Image store is required' };
       }
 
       if (!name) {
-        throw { status: 400, message: "Name is required" };
+        throw { status: 400, message: 'Name is required' };
       }
       if (!description) {
-        throw { status: 400, message: "Description is required" };
+        throw { status: 400, message: 'Description is required' };
       }
 
       await imageKit.upload(
