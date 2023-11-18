@@ -6,6 +6,9 @@ class orderControllers {
       const orders = await Order.findAll({
         where: { UserId: req.user.id }
       })
+      if (orders.length == 0) {
+        throw { status: 404, message: "No order has been made" }
+      }
       res.status(200).json(orders)
     } catch (error) {
       next (error)
@@ -29,10 +32,10 @@ class orderControllers {
   static async createOrder(req, res, next) {
     try {
       console.log(req.body)
-      const { StoreId, notes, status } = req.body
+      const { StoreId, status } = req.body
 
-      await Order.create({StoreId, UserId: req.user.id, notes, status})
-      res.status(201).json("Success creating order")
+      await Order.create({StoreId, UserId: req.user.id, status})
+      res.status(201).json({ message: "Success creating order" })
     } catch (error) {
       next (error)
     }
@@ -55,7 +58,7 @@ class orderControllers {
   static async deleteOrder(req, res, next) {
     try {
       await Order.destroy({where: {id: req.params.id} })
-      res.status(200).json("Order has been deleted")
+      res.status(200).json({ message: "Order has been deleted" })
     } catch (error) {
       next (error)
     }
