@@ -1,16 +1,16 @@
-const { User, Store, RatingStore, Food, RatingFood, sequelize } = require("../models");
-const imageKit = require("../helpers/imageKit");
+const { User, Store, RatingStore, Food, RatingFood, sequelize } = require('../models');
+const imageKit = require('../helpers/imageKit');
 
 class storeControllers {
   static async showStores(req, res, next) {
     try {
       // Filter by Location, order ASC
       const stores = await Store.findAll({
-        attributes: { exclude: ["createdAt", "updatedAt"] },
+        attributes: { exclude: ['createdAt', 'updatedAt'] },
         include: [
           {
             model: User,
-            attributes: { exclude: ["createdAt", "updatedAt", "password"] },
+            attributes: { exclude: ['createdAt', 'updatedAt', 'password'] },
           },
         ],
       });
@@ -23,21 +23,23 @@ class storeControllers {
   static async findStore(req, res, next) {
     try {
       const { id } = req.params;
-      const store = await Store.findByPk(id, {
-        attributes: { exclude: ["createdAt", "updatedAt"] },
+      const UserId = req.userId;
+      const store = await Store.findOne({
+        where: { UserId },
+        attributes: { exclude: ['createdAt', 'updatedAt'] },
         include: [
           {
             model: Food,
-            attributes: { exclude: ["createdAt", "updatedAt"] },
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
           },
           {
             model: User,
-            attributes: { exclude: ["createdAt", "updatedAt", "password"] },
+            attributes: { exclude: ['createdAt', 'updatedAt', 'password'] },
           },
         ],
       });
       if (!store) {
-        throw { status: 404, message: "Store Not Found" };
+        throw { status: 404, message: 'Store Not Found' };
       }
       res.status(200).json(store);
     } catch (error) {
@@ -49,21 +51,24 @@ class storeControllers {
     try {
       const { name, description } = req.body;
 
-      await imageKit.upload({
-        file: req.file.buffer.toString('base64'),
-        fileName: `${Date.now()}_${req.file.originalname}`,
-        folder: 'BB_Store',
-        useUniqueFileName: false
-      }, async function (err, fileResponse) {
-        if(err) {
-          return res.status(500).json({
-            message: "Error occured during photo upload. Please try again."
-          })
-        }
+      await imageKit.upload(
+        {
+          file: req.file.buffer.toString('base64'),
+          fileName: `${Date.now()}_${req.file.originalname}`,
+          folder: 'BB_Store',
+          useUniqueFileName: false,
+        },
+        async function (err, fileResponse) {
+          if (err) {
+            return res.status(500).json({
+              message: 'Error occured during photo upload. Please try again.',
+            });
+          }
 
-        await Store.create({ name, imageUrl: fileResponse.url, description, UserId: req.user.id });
-        res.status(201).json({ message: "Success create store"});
-      })
+          await Store.create({ name, imageUrl: fileResponse.url, description, UserId: req.user.id });
+          res.status(201).json({ message: 'Success create store' });
+        }
+      );
     } catch (error) {
       next(error);
     }
@@ -74,11 +79,8 @@ class storeControllers {
       console.log(req.params.id);
       const { name, imageUrl, description } = req.body;
       console.log({ name });
-      await Store.update(
-        { name, imageUrl, description },
-        { where: { id: req.params.id } }
-      );
-      res.status(200).json({ message: "Success updating store information" });
+      await Store.update({ name, imageUrl, description }, { where: { id: req.params.id } });
+      res.status(200).json({ message: 'Success updating store information' });
     } catch (error) {
       next(error);
     }
@@ -87,7 +89,7 @@ class storeControllers {
   static async deleteStore(req, res, next) {
     try {
       await Store.destroy({ where: { id: req.params.id } });
-      res.status(200).json({ message: "Store has been deleted" });
+      res.status(200).json({ message: 'Store has been deleted' });
     } catch (error) {
       next(error);
     }
