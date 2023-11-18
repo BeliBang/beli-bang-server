@@ -44,10 +44,23 @@ class userControllers {
       }
 
       const access_token = signToken({ id: user.id, email: user.email });
-      res.status(200).json({ access_token, username: user.username, role: user.role });
+      res.status(200).json({ access_token, username: user.username, role: user.role, id: user.id });
     } catch (error) {
       console.log(error);
       next(error);
+    }
+  }
+
+  static async fetchById(req, res, next) {
+    try {
+      const {id} = req.params
+      const user = await User.findByPk(id);
+      if (!user) {
+        throw { status: 404, message: "User Not Found" };
+      }
+      res.status(200).json(user);
+    } catch (error) {
+      
     }
   }
 
