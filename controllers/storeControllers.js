@@ -1,5 +1,5 @@
-const { User, Store, RatingStore, Food, RatingFood } = require("../models")
-const imageKit = require("../helpers/imageKit")
+const { User, Store, RatingStore, Food, RatingFood } = require("../models");
+const imageKit = require("../helpers/imageKit");
 
 class storeControllers {
   static async showStores(req, res, next) {
@@ -11,16 +11,19 @@ class storeControllers {
         include: [
           {
             model: User,
-            attributes: { exclude: ["createdAt", "updatedAt", "password"] }
-          }
-        ]
-      })
+            attributes: { exclude: ["createdAt", "updatedAt", "password"] },
+          },
+        ],
+      });
       if (stores.length == 0) {
-        throw { status: 404, message: "Sorry, there is no available store near your area" }
+        throw {
+          status: 404,
+          message: "Sorry, there is no available store near your area",
+        };
       }
-      res.status(200).json(stores)
+      res.status(200).json(stores);
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -32,20 +35,20 @@ class storeControllers {
         include: [
           {
             model: Food,
-            attributes: { exclude: ["createdAt", "updatedAt"] }
+            attributes: { exclude: ["createdAt", "updatedAt"] },
           },
           {
             model: User,
-            attributes: { exclude: ["createdAt", "updatedAt", "password"] }
-          }
-        ]
-      })
+            attributes: { exclude: ["createdAt", "updatedAt", "password"] },
+          },
+        ],
+      });
       if (!store) {
-        throw { status: 404, message: "Store Not Found" }
+        throw { status: 404, message: "Store Not Found" };
       }
-      res.status(200).json(store)
+      res.status(200).json(store);
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -58,39 +61,39 @@ class storeControllers {
         include: [
           {
             model: Food,
-            attributes: { exclude: ["createdAt", "updatedAt"] }
+            attributes: { exclude: ["createdAt", "updatedAt"] },
           },
           {
             model: User,
-            attributes: { exclude: ["createdAt", "updatedAt", "password"] }
-          }
-        ]
-      })
+            attributes: { exclude: ["createdAt", "updatedAt", "password"] },
+          },
+        ],
+      });
       if (!storeSeller) {
-        throw { status: 404, message: "You have not registered a store" }
+        throw { status: 404, message: "You have not registered a store" };
       }
-      res.status(200).json(storeSeller)
+      res.status(200).json(storeSeller);
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
   static async createStore(req, res, next) {
     try {
-      const { name, description } = req.body
+      const { name, description } = req.body;
 
-      const store = await Store.findOne({ where: { UserId: req.user.id } })
+      const store = await Store.findOne({ where: { UserId: req.user.id } });
       if (store) {
-        throw { status: 401, message: "You already have a store" }
+        throw { status: 401, message: "You already have a store" };
       }
       if (!req.file) {
-        throw { status: 400, message: "Image store is required" }
+        throw { status: 400, message: "Image store is required" };
       }
       if (!name) {
-        throw { status: 400, message: "Name is required" }
+        throw { status: 400, message: "Name is required" };
       }
       if (!description) {
-        throw { status: 400, message: "Description is required" }
+        throw { status: 400, message: "Description is required" };
       }
 
       await imageKit.upload(
@@ -103,8 +106,8 @@ class storeControllers {
         async function (err, fileResponse) {
           if (err) {
             return res.status(500).json({
-              message: "Error occured during photo upload. Please try again."
-            })
+              message: "Error occured during photo upload. Please try again.",
+            });
           }
 
           await Store.create({
@@ -112,36 +115,36 @@ class storeControllers {
             imageUrl: fileResponse.url,
             description,
             UserId: req.user.id,
-          })
-          res.status(201).json({ message: "Success creating store" })
+          });
+          res.status(201).json({ message: "Success creating store" });
         }
-      )
+      );
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
   static async updateStore(req, res, next) {
     try {
-      console.log(req.params.id)
-      const { name, imageUrl, description, status } = req.body
-      console.log({ name })
+      console.log(req.params.id);
+      const { name, imageUrl, description, status } = req.body;
+      console.log({ name });
       await Store.update(
         { name, imageUrl, description, status },
         { where: { id: req.params.id } }
-      )
-      res.status(200).json({ message: "Success updating store information" })
+      );
+      res.status(200).json({ message: "Success updating store information" });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
   static async deleteStore(req, res, next) {
     try {
-      await Store.destroy({ where: { id: req.params.id } })
-      res.status(200).json({ message: "Store has been deleted" })
+      await Store.destroy({ where: { id: req.params.id } });
+      res.status(200).json({ message: "Store has been deleted" });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 }

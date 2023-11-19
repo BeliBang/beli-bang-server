@@ -31,6 +31,19 @@ class foodControllers {
         throw { status: 404, message: "Store Not Found" };
       }
 
+      if (!req.file) {
+        throw { status: 400, message: "Image is required" };
+      }
+      if (!name) {
+        throw { status: 400, message: "Name is required" };
+      }
+      if (!price) {
+        throw { status: 400, message: "Price is required" };
+      }
+      if (!description) {
+        throw { status: 400, message: "Description is required" };
+      }
+
       const StoreId = store.id;
 
       await imageKit.upload(
@@ -64,7 +77,7 @@ class foodControllers {
 
   static async updateFood(req, res, next) {
     try {
-      const { name, imageUrl, price, description } = req.body;
+      const { name, price, imageUrl, description } = req.body;
 
       await Food.update(
         { name, imageUrl, price, description },
