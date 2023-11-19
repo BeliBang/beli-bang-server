@@ -4,6 +4,7 @@ const router = express.Router();
 
 router.get("/stores/rating/:storeId", ratingStoreControllers.findRating);
 router.post("/stores/rating/:storeId", ratingStoreControllers.createRating);
+router.put("/stores/rating/:id", ratingStoreControllers.updateRating);
 router.delete("/stores/rating/:id", ratingStoreControllers.deleteRating);
 
 module.exports = router;
