@@ -181,7 +181,7 @@ describe("POST /register", () => {
         done(err)
       })
   })
-  
+
   test("400 register User with incorrect password length", (done) => {
     request(app)
       .post("/register")
@@ -226,7 +226,7 @@ describe("POST /register", () => {
         done(err)
       })
   })
-  
+
   test("400 register User without phone number", (done) => {
     request(app)
       .post("/register")
@@ -248,7 +248,7 @@ describe("POST /register", () => {
         done(err)
       })
   })
-  
+
   test("400 register User without address", (done) => {
     request(app)
       .post("/register")
@@ -296,7 +296,7 @@ describe("POST /login", () => {
         done(err)
       })
   })
-  
+
   test("400 login User without email", (done) => {
     request(app)
       .post("/login")
@@ -314,7 +314,7 @@ describe("POST /login", () => {
         done(err)
       })
   })
-  
+
   test("400 login User without password", (done) => {
     request(app)
       .post("/login")
@@ -351,7 +351,7 @@ describe("POST /login", () => {
         done(err)
       })
   })
-  
+
   test("401 login User with incorrect password", (done) => {
     request(app)
       .post("/login")
@@ -405,7 +405,7 @@ describe("GET /users/:id", () => {
         done(err)
       })
   })
-  
+
   test("401 fetching User without token", (done) => {
     request(app)
       .get(`/users/${sellerId}`)
