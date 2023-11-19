@@ -55,7 +55,9 @@ class userControllers {
   static async fetchById(req, res, next) {
     try {
       const { id } = req.params;
-      const user = await User.findByPk(id);
+      const user = await User.findByPk(id, {
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+      });
       if (!user) {
         throw { status: 404, message: "User Not Found" };
       }
