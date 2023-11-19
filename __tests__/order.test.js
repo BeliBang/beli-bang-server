@@ -28,33 +28,23 @@ const dataCustomer = {
 const dataStore = {
   name: "Store",
   description: "Description",
-  // UserId:
   imageUrl: "Image"
 }
 
 const dataOrder = {
-  // StoreId:
-  // UserId:
   status: "Success"
 }
 
 beforeAll((done) => {
   User.create(dataSeller)
     .then((seller) => {
-      validSellerToken = signToken({
-        id: seller.id,
-        email: seller.email,
-      })
+      validSellerToken = signToken({ id: seller.id, email: seller.email })
       dataStore.UserId = seller.id
       return User.create(dataCustomer)
     })
     .then((customer) => {
-      validCustomerToken = signToken({
-        id: customer.id,
-        email: customer.email,
-      })
-      invalidToken =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIwMUBtYWlsLmNvbSIsImlkIjoxLCJpYXQiOjE2MjI2MDk2NTF9.gShAB2qaCUjlnvNuM1MBWfE"
+      validCustomerToken = signToken({ id: customer.id, email: customer.email })
+      invalidToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIwMUBtYWlsLmNvbSIsImlkIjoxLCJpYXQiOjE2MjI2MDk2NTF9.gShAB2qaCUjlnvNuM1MBWfE"
       dataOrder.UserId = customer.id
       return Store.create(dataStore)
     })

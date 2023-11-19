@@ -26,13 +26,9 @@ const dataCustomer = {
 beforeAll((done) => {
   User.create(dataSeller)
     .then((seller) => {
-      validSellerToken = signToken({
-        id: seller.id,
-        email: seller.email,
-      })
+      validSellerToken = signToken({ id: seller.id, email: seller.email })
       sellerId = seller.id
-      invalidToken =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIwMUBtYWlsLmNvbSIsImlkIjoxLCJpYXQiOjE2MjI2MDk2NTF9.gShAB2qaCUjlnvNuM1MBWfE"
+      invalidToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIwMUBtYWlsLmNvbSIsImlkIjoxLCJpYXQiOjE2MjI2MDk2NTF9.gShAB2qaCUjlnvNuM1MBWfE"
       done()
     })
     .catch((err) => {
@@ -197,7 +193,7 @@ describe("POST /register", () => {
         const { body, status } = response
  
         expect(status).toBe(400)
-        expect(body).toHaveProperty("message", "Minimum password is 5 characters and maximum 12 characters")
+        expect(body).toHaveProperty("message", "Minimum password is 5 characters")
         done()
       })
       .catch((err) => {
