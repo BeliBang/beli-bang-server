@@ -28,13 +28,13 @@ const dataCustomer = {
 const dataStore = {
   name: "Store",
   description: "Description",
-  // UserId: 1,
+  // UserId:
   imageUrl: "Image"
 }
 
 const dataOrder = {
-  // StoreId: 1,
-  // UserId: 2,
+  // StoreId:
+  // UserId:
   status: "Success"
 }
 
