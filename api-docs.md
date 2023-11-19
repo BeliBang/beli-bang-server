@@ -6,6 +6,13 @@ List of available endpoints:
 
 - `POST /register`
 - `POST /login`
+- `PATCH /users/username`
+- `PATCH /users/password`
+- `PATCH /users/phonenumber`
+- `PATCH /users/address`
+- `PATCH /users/profilepicture`
+- `PATCH /users/location`
+- `GET /users/:id`
 
 - `GET /stores`
 - `GET /stores/:id`
@@ -51,8 +58,7 @@ List of available endpoints:
   "password": "string",
   "role": "string",
   "phoneNumber": "string",
-  "address": "string",
-  "profilePicture": "string"
+  "address": "string"
 }
 ```
 
@@ -61,7 +67,8 @@ _Response (201 - Created)_
 ```json
 {
   "access_token": "string",
-  "role": "string"
+  "role": "string",
+  "id": "integer"
 }
 ```
 
@@ -109,7 +116,7 @@ OR
 
 ```json
 {
-  "message": "Minimum password is 5 characters and maximum 12 characters"
+  "message": "Minimum password is 5 character"
 }
 ```
 
@@ -158,7 +165,8 @@ _Response (200 - OK)_
 {
   "access_token": "string",
   "username": "string",
-  "role": "string"
+  "role": "string",
+  "id": "integer"
 }
 ```
 
@@ -183,6 +191,397 @@ _Response (401 - Unauthorized)_
 ```json
 {
   "message": "Invalid email/password"
+}
+```
+
+&nbsp;
+
+## PATCH /users/username
+
+Description:
+
+> edit username from users to the database
+
+#### Request:
+
+- Headers:
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+- body:
+
+```json
+{
+  "username": "string"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+{
+  "message": "Success Edit Username"
+}
+```
+
+_Response (400 - Bad Request)_
+
+```json
+{
+  "message": "Username is required"
+}
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "User Not Found"
+}
+```
+
+&nbsp;
+
+## PATCH /users/password
+
+Description:
+
+> change password from users to the database
+
+#### Request:
+
+- Headers:
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+- body:
+
+```json
+{
+  "oldPassword": "string",
+  "newPassword": "string",
+  "confirmPassword": "string"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+{
+  "message": "Success Edit Password"
+}
+```
+
+_Response (400 - Bad Request)_
+
+```json
+{
+  "message": "Password is required"
+}
+```
+
+OR
+
+```json
+{
+  "message": "Password does not match"
+}
+```
+
+_Response (401 - Unauthorized)_
+
+```json
+{
+  "message": "Invalid password"
+}
+```
+
+OR
+
+```json
+{
+  "message": "Cannot use the old password"
+}
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "User Not Found"
+}
+```
+
+&nbsp;
+
+## PATCH /users/phonenumber
+
+Description:
+
+> change Phone number from users to the database
+
+#### Request:
+
+- Headers:
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+- body:
+
+```json
+{
+  "phoneNumber": "string"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+{
+  "message": "Success Edit Phone Number"
+}
+```
+
+_Response (400 - Bad Request)_
+
+```json
+{
+  "message": "Phone Number is required"
+}
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "User Not Found"
+}
+```
+
+&nbsp;
+
+## PATCH /users/address
+
+Description:
+
+> change Address from users to the database
+
+#### Request:
+
+- Headers:
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+- body:
+
+```json
+{
+  "address": "string"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+{
+  "message": "Success Edit Address"
+}
+```
+
+_Response (400 - Bad Request)_
+
+```json
+{
+  "message": "Address is required"
+}
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "User Not Found"
+}
+```
+
+&nbsp;
+
+## PATCH /users/profilepicture
+
+Description:
+
+> change profile picture from users to the database
+
+#### Request:
+
+- Headers:
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+- file:
+
+```json
+{
+  "fieldname": "profilePicture",
+  "originalname": "image.png",
+  "mimetype": "image/png",
+  "buffer": "buffer"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+{
+  "message": "Success Edit Profile Picture"
+}
+```
+
+_Response (400 - Bad Request)_
+
+```json
+{
+  "message": "Profile Picture is required"
+}
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "User Not Found"
+}
+```
+
+_Response (500 - Internal Server Error)_
+
+```json
+{
+  "message": "Error occured during photo upload. Please try again."
+}
+```
+
+&nbsp;
+
+## PATCH /users/location
+
+Description:
+
+> change Location from users to the database
+
+#### Request:
+
+- Headers:
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+- body:
+
+```json
+{
+  "longitude": "string",
+  "latitude": "string"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+{
+  "message": "Success Edit Location"
+}
+```
+
+_Response (400 - Bad Request)_
+
+```json
+{
+  "message": "Location is required"
+}
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "User Not Found"
+}
+```
+
+&nbsp;
+
+## GET /users/:id
+
+Description:
+
+> Get users by id from database
+
+#### Request:
+
+- headers
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+- params:
+
+```json
+{
+  "id": "integer"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+{
+  "id": 1,
+  "username": "seller1",
+  "email": "seller1@mail.com",
+  "password": "string",
+  "role": "Seller",
+  "phoneNumber": "0899999",
+  "address": "jl.indonesia",
+  "profilePicture": "https://www.mmm.ucar.edu/sites/default/files/img/default-avatar.jpg",
+  "location": {
+    "type": "Point",
+    "coordinates": [107.59278847659893, -6.942981263106864]
+  }
+}
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "User Not Found"
 }
 ```
 
@@ -596,13 +995,13 @@ _Response (200 - OK)_
 
 ```json
 {
-    "id": 1,
-    "name": "Ayam Goreng Original",
-    "imageUrl": "https://live.staticflickr.com/65535/51364535374_64b9889b7d_b.jpg",
-    "price": 15000,
-    "description": "Ayam goreng Original dengan tepung rahasia",
-    "StoreId": 1,
-    "RatingFoods": []
+  "id": 1,
+  "name": "Ayam Goreng Original",
+  "imageUrl": "https://live.staticflickr.com/65535/51364535374_64b9889b7d_b.jpg",
+  "price": 15000,
+  "description": "Ayam goreng Original dengan tepung rahasia",
+  "StoreId": 1,
+  "RatingFoods": []
 }
 ```
 

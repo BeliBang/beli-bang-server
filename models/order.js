@@ -15,8 +15,30 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Order.init({
-    StoreId: DataTypes.INTEGER,
-    UserId: DataTypes.INTEGER,
+    StoreId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Store ID is required",
+        },
+        notNull: {
+          msg: "Store ID is required",
+        },
+      },
+    },
+    UserId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "User ID is required",
+        },
+        notNull: {
+          msg: "User ID is required",
+        },
+      },
+    },
     status: DataTypes.STRING
   }, {
     sequelize,

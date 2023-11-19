@@ -7,7 +7,14 @@ const router = express.Router();
 router.post("/register", userControllers.register);
 router.post("/login", userControllers.login);
 router.use(authentication);
-router.put("/users", upload.single("profilePicture"), userControllers.editProfilePicture);
+
+router.patch("/users/username", userControllers.editUsername)
+router.patch("/users/password", userControllers.editPassword)
+router.patch("/users/phonenumber", userControllers.editPhoneNumber)
+router.patch("/users/address", userControllers.editAddress)
+router.patch("/users/profilepicture", upload.single("profilePicture"), userControllers.editProfilePicture);
+router.patch("/users/location", userControllers.editlocation)
+
 router.get("/users/:id", userControllers.fetchById);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-const { User, Store, RatingStore, Food, RatingFood, sequelize } = require('../models');
+const { User, Store, RatingStore, Food, RatingFood } = require('../models');
 const imageKit = require('../helpers/imageKit');
 
 class storeControllers {
@@ -15,6 +15,9 @@ class storeControllers {
           },
         ],
       });
+      if (stores.length == 0) {
+        throw { status: 404, message: 'Sorry, there is no available store near your area' };
+      }
       res.status(200).json(stores);
     } catch (error) {
       next(error);
@@ -66,7 +69,7 @@ class storeControllers {
         ],
       });
       if (!storeSeller) {
-        throw { status: 404, message: 'Store Not Found' };
+        throw { status: 404, message: 'You have not registered a store' };
       }
       res.status(200).json(storeSeller);
     } catch (error) {
@@ -82,11 +85,9 @@ class storeControllers {
       if (store) {
         throw { status: 401, message: 'You already have a store' };
       }
-
       if (!req.file) {
         throw { status: 400, message: 'Image store is required' };
       }
-
       if (!name) {
         throw { status: 400, message: 'Name is required' };
       }
@@ -114,7 +115,7 @@ class storeControllers {
             description,
             UserId: req.user.id,
           });
-          res.status(201).json({ message: 'Success create store' });
+          res.status(201).json({ message: 'Success creating store' });
         }
       );
     } catch (error) {
@@ -125,9 +126,9 @@ class storeControllers {
   static async updateStore(req, res, next) {
     try {
       console.log(req.params.id);
-      const { name, imageUrl, description } = req.body;
+      const { name, imageUrl, description, status } = req.body;
       console.log({ name });
-      await Store.update({ name, imageUrl, description }, { where: { id: req.params.id } });
+      await Store.update({ name, imageUrl, description, status }, { where: { id: req.params.id } });
       res.status(200).json({ message: 'Success updating store information' });
     } catch (error) {
       next(error);
