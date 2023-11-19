@@ -1,10 +1,27 @@
 const { Store, User, Food, Order } = require('../models')
 
 class orderControllers {
-  static async showOrders(req, res, next) {
+  static async showOrderCustomers(req, res, next) {
     try {
       const orders = await Order.findAll({
         where: { UserId: req.user.id }
+      })
+      if (orders.length == 0) {
+        throw { status: 404, message: "No order has been made" }
+      }
+      res.status(200).json(orders)
+    } catch (error) {
+      next (error)
+    }
+  }
+  
+  static async showOrderSellers(req, res, next) {
+    try {
+      const id = req.user.id
+
+      const store = await Store.findOne({where: {UserId: id}})
+      const orders = await Order.findAll({
+        where: { StoreId: store.id }
       })
       if (orders.length == 0) {
         throw { status: 404, message: "No order has been made" }
