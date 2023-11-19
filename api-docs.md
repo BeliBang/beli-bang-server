@@ -15,6 +15,7 @@ List of available endpoints:
 - `GET /users/:id`
 
 - `GET /stores`
+- `GET /stores/seller`
 - `GET /stores/:id`
 - `POST /stores`
 - `PUT /stores/:id`
@@ -607,40 +608,49 @@ _Response (200 - OK)_
 
 ```json
 [
-  {
-    "id": 1,
-    "name": "HISANA disuka",
-    "status": false,
-    "imageUrl": "image.jpg",
-    "description": "Selamat datang di HISANA disuka destinasi terbaik untuk pencinta ayam goreng yang menginginkan cita rasa istimewa! Toko kami menawarkan pengalaman kuliner yang tak terlupakan dengan menu utama kami yang lezat dan beragam pilihan.",
-    "latitude": "",
-    "longitude": "",
-    "area": "",
-    "UserId": 1,
-    "User": {
-      "id": 1,
-      "username": "seller1",
-      "email": "seller1@mail.com",
-      "role": "Seller",
-      "phoneNumber": "0899999",
-      "address": "jl.indonesia",
-      "profilePicture": "https://media.licdn.com/dms/image/C5603AQFdKoZc74rnwA/profile-displayphoto-shrink_800_800/0/1626883365645?e=2147483647&v=beta&t=D5tXW8mAuk6ZNHEsGp7I9Jlu36n-p7u0VTLsdigqm1k",
-      "latitude": "",
-      "longitude": "",
-      "area": ""
-    }
-  },
+{
+        "id": 1,
+        "name": "HISANA disuka",
+        "status": true,
+        "imageUrl": "image.jpg",
+        "description": "Selamat datang di HISANA disuka destinasi terbaik untuk pencinta ayam goreng yang menginginkan cita rasa istimewa! Toko kami menawarkan pengalaman kuliner yang tak terlupakan dengan menu utama kami yang lezat dan beragam pilihan.",
+        "UserId": 1,
+        "User": {
+            "id": 1,
+            "username": "seller1",
+            "email": "seller1@mail.com",
+            "role": "Seller",
+            "phoneNumber": "0899999",
+            "address": "jl.indonesia",
+            "profilePicture": "https://www.mmm.ucar.edu/sites/default/files/img/default-avatar.jpg",
+            "location": {
+                "type": "Point",
+                "coordinates": [
+                    107.59278847659893,
+                    -6.942981263106864
+                ]
+            }
+        }
+    },
   ...
 ]
 ```
 
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "Sorry, there is no available store near your area"
+}
+```
+
 &nbsp;
 
-## GET /stores/:id
+## GET /stores/seller
 
 Description:
 
-> Get store by id from database
+> Get store Seller from database
 
 #### Request:
 
@@ -652,21 +662,13 @@ Description:
 }
 ```
 
-- params:
-
-```json
-{
-  "id": "integer"
-}
-```
-
 _Response (200 - OK)_
 
 ```json
 {
   "id": 1,
   "name": "HISANA disuka",
-  "status": false,
+  "status": true,
   "imageUrl": "image.jpg",
   "description": "Selamat datang di HISANA disuka destinasi terbaik untuk pencinta ayam goreng yang menginginkan cita rasa istimewa! Toko kami menawarkan pengalaman kuliner yang tak terlupakan dengan menu utama kami yang lezat dan beragam pilihan.",
   "UserId": 1,
@@ -703,7 +705,97 @@ _Response (200 - OK)_
     "role": "Seller",
     "phoneNumber": "0899999",
     "address": "jl.indonesia",
-    "profilePicture": "https://media.licdn.com/dms/image/C5603AQFdKoZc74rnwA/profile-displayphoto-shrink_800_800/0/1626883365645?e=2147483647&v=beta&t=D5tXW8mAuk6ZNHEsGp7I9Jlu36n-p7u0VTLsdigqm1k"
+    "profilePicture": "https://www.mmm.ucar.edu/sites/default/files/img/default-avatar.jpg",
+    "location": {
+      "type": "Point",
+      "coordinates": [107.59278847659893, -6.942981263106864]
+    }
+  }
+}
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "You have not registered a store"
+}
+```
+
+&nbsp;
+
+## GET /stores/:id
+
+Description:
+
+> Get store by id from database
+
+#### Request:
+
+- headers
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+- params:
+
+```json
+{
+  "id": "integer"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+{
+  "id": 2,
+  "name": "Kedai Sate Taichan",
+  "status": true,
+  "imageUrl": "https://asset-2.tstatic.net/travel/foto/bank/images/sate-taican_20170207_185659.jpg",
+  "description": "Selamat datang di Kedai Sate Taichan destinasi pilihan bagi para pencinta kuliner yang menginginkan sensasi pedas dan kenikmatan unik dari sate taichan! Toko kami menawarkan pengalaman gastronomi yang tak terlupakan dengan menu utama kami yang lezat dan menggugah selera.",
+  "UserId": 2,
+  "Food": [
+    {
+      "id": 4,
+      "name": "Taichan Kulit",
+      "imageUrl": "https://www.satetaichangoreng.com/images/s5.png",
+      "price": 18000,
+      "description": "Sate taichan yang menggunakan full kulit ayam untuk pecinta kulit",
+      "StoreId": 2
+    },
+    {
+      "id": 5,
+      "name": "Taichan Paha",
+      "imageUrl": "https://www.satetaichangoreng.com/images/s1.png",
+      "price": 19000,
+      "description": "Sate taichan yang menggunakan daging paha ayam agar empuk",
+      "StoreId": 2
+    },
+    {
+      "id": 6,
+      "name": "Taichan Mozzarella",
+      "imageUrl": "https://www.satetaichangoreng.com/images/taichanm.jpg",
+      "price": 23000,
+      "description": "Sate taichan yang dibalur dengan keju mozzarella",
+      "StoreId": 2
+    }
+  ],
+  "User": {
+    "id": 2,
+    "username": "seller2",
+    "email": "seller2@mail.com",
+    "role": "Seller",
+    "phoneNumber": "0877777",
+    "address": "jl.indonesia",
+    "profilePicture": "https://ik.imagekit.io/h2rsqr1wu/BB_User/1700290578025_icon-teriak.png",
+    "location": {
+      "type": "Point",
+      "coordinates": [107.59278847659893, -6.942981263106864]
+    }
   }
 }
 ```
@@ -735,15 +827,23 @@ Description:
 }
 ```
 
+- file:
+
+```json
+{
+  "fieldname": "imageUrl",
+  "originalname": "image.png",
+  "mimetype": "image/png",
+  "buffer": "buffer"
+}
+```
+
 - Body:
 
 ```json
 {
   "name": "string",
-  "imageUrl": "string",
-  "description": "string",
-  "createdAt": "DateString",
-  "updatedAt": "DateString"
+  "description": "string"
 }
 ```
 
@@ -751,11 +851,19 @@ _Response (201 - Created)_
 
 ```json
 {
-  "message": "Success create store"
+  "message": "Success creating store"
 }
 ```
 
 _Response (400 - Bad Request)_
+
+```json
+{
+  "message": "Image store is required"
+}
+```
+
+OR
 
 ```json
 {
@@ -765,16 +873,27 @@ _Response (400 - Bad Request)_
 
 OR
 
-````json
-{
-    "message": "Image is required"
-}
-OR
 ```json
 {
-    "message": "Description is required"
+  "message": "Description is required"
 }
-````
+```
+
+_Response (401 - Unauthorized)_
+
+```json
+{
+  "message": "You already have a store"
+}
+```
+
+_Response (500 - Internal Server Error)_
+
+```json
+{
+  "message": "Error occured during photo upload. Please try again."
+}
+```
 
 &nbsp;
 
@@ -906,12 +1025,22 @@ Description:
 }
 ```
 
+- file:
+
+```json
+{
+  "fieldname": "imageUrl",
+  "originalname": "image.png",
+  "mimetype": "image/png",
+  "buffer": "buffer"
+}
+```
+
 - body:
 
 ```json
 {
   "name": "string",
-  "imageUrl": "string",
   "price": "integer",
   "description": "string"
 }
@@ -957,11 +1086,27 @@ OR
 }
 ```
 
+_Response (403 - Forbidden)_
+
+```json
+{
+  "message": "Forbidden for the seller"
+}
+```
+
 _Response (404 - Not Found)_
 
 ```json
 {
   "message": "Store Not Found"
+}
+```
+
+_Response (500 - Internal Server Error)_
+
+```json
+{
+  "message": "Error occured during photo upload. Please try again."
 }
 ```
 

@@ -16,7 +16,10 @@ class storeControllers {
         ],
       });
       if (stores.length == 0) {
-        throw { status: 404, message: 'Sorry, there is no available store near your area' };
+        throw {
+          status: 404,
+          message: 'Sorry, there is no available store near your area',
+        };
       }
       res.status(200).json(stores);
     } catch (error) {
