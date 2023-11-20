@@ -1,4 +1,4 @@
-const { User, Store, RatingStore, Food, RatingFood } = require("../models");
+const { User, Store, Food } = require("../models");
 const imageKit = require("../helpers/imageKit");
 
 class storeControllers {

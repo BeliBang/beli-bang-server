@@ -31,9 +31,7 @@ class foodControllers {
         throw { status: 404, message: "Please register your store first" };
       }
 
-      if (!req.file) {
-        throw { status: 400, message: "Image is required" };
-      }
+      
       if (!name) {
         throw { status: 400, message: "Name is required" };
       }
@@ -42,6 +40,9 @@ class foodControllers {
       }
       if (!description) {
         throw { status: 400, message: "Description is required" };
+      }
+      if (!req.file) {
+        throw { status: 400, message: "Image is required" };
       }
 
       const StoreId = store.id;
@@ -81,22 +82,21 @@ class foodControllers {
       const { id } = req.params;
 
       const food = await Food.findByPk(id);
-      if (!food) {
-        throw { status: 404, message: "Food Not Found" };
-      }
 
       if (!req.file) {
         await food.update({ name, price, description });
         res.status(200).json({ message: "Success updating food information" });
       } else {
-        
-        if (!name) {
+        if (!req.file.buffer) {
+          throw { status: 400, message: "Image is required" }
+        }
+        if (name == "") {
           throw { status: 400, message: "Name is required" };
         }
-        if (!price) {
+        if (price == "") {
           throw { status: 400, message: "Price is required" };
         }
-        if (!description) {
+        if (description == "") {
           throw { status: 400, message: "Description is required" };
         }
 

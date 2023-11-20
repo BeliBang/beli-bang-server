@@ -90,10 +90,10 @@ afterAll(async () => {
 })
 
 // CREATE RATING ===========================================================
-describe("POST /stores/rating/:storeId", () => {
+describe("POST /ratingstores/:storeId", () => {
   test("201 success create new Rating", (done) => {
     request(app)
-      .post(`/stores/rating/${storeId1}`)
+      .post(`/ratingstores/${storeId1}`)
       .set("access_token", validCustomerToken)
       .send({ score: 5 })
       .then((response) => {
@@ -110,7 +110,7 @@ describe("POST /stores/rating/:storeId", () => {
   
   test("401 create Rating with duplicate User ID", (done) => {
     request(app)
-      .post(`/stores/rating/${storeId1}`)
+      .post(`/ratingstores/${storeId1}`)
       .set("access_token", validCustomerToken)
       .send({ score: 5 })
       .then((response) => {
@@ -127,7 +127,7 @@ describe("POST /stores/rating/:storeId", () => {
 
   test("401 create Rating with invalid token", (done) => {
     request(app)
-      .post(`/stores/rating/${storeId1}`)
+      .post(`/ratingstores/${storeId1}`)
       .set("access_token", invalidToken)
       .send({ score: 5 })
       .then((response) => {
@@ -144,7 +144,7 @@ describe("POST /stores/rating/:storeId", () => {
   
   test("401 create Rating without token", (done) => {
     request(app)
-      .post(`/stores/rating/${storeId1}`)
+      .post(`/ratingstores/${storeId1}`)
       .send({ score: 5 })
       .then((response) => {
         const { body, status } = response
@@ -160,10 +160,10 @@ describe("POST /stores/rating/:storeId", () => {
 })
 
 // SHOW STORES RATING ======================================================
-describe("GET /stores/rating/:storeId", () => {
+describe("GET /ratingstores/:storeId", () => {
   test("200 success get all Ratings", (done) => {
     request(app)
-      .get(`/stores/rating/${storeId1}`)
+      .get(`/ratingstores/${storeId1}`)
       .set("access_token", validCustomerToken)
       .then((response) => {
         const { body, status } = response
@@ -180,7 +180,7 @@ describe("GET /stores/rating/:storeId", () => {
 
   test("401 find Ratings with invalid token", (done) => {
     request(app)
-      .get(`/stores/rating/${storeId1}`)
+      .get(`/ratingstores/${storeId1}`)
       .set("access_token", invalidToken)
       .then((response) => {
         const { body, status } = response
@@ -196,7 +196,7 @@ describe("GET /stores/rating/:storeId", () => {
   
   test("401 find Ratings without token", (done) => {
     request(app)
-      .get(`/stores/rating/${storeId1}`)
+      .get(`/ratingstores/${storeId1}`)
       .then((response) => {
         const { body, status } = response
 
@@ -211,7 +211,7 @@ describe("GET /stores/rating/:storeId", () => {
 
   test("404 find Ratings of a Store not in database", (done) => {
     request(app)
-      .get("/stores/rating/99")
+      .get("/ratingstores/99")
       .set("access_token", validCustomerToken)
       .then((response) => {
         const { body, status } = response
@@ -227,7 +227,7 @@ describe("GET /stores/rating/:storeId", () => {
   
   test("404 find no Ratings", (done) => {
     request(app)
-      .get(`/stores/rating/${storeId2}`)
+      .get(`/ratingstores/${storeId2}`)
       .set("access_token", validCustomerToken)
       .then((response) => {
         const { body, status } = response
@@ -243,10 +243,10 @@ describe("GET /stores/rating/:storeId", () => {
 })
 
 // UPDATE RATING ============================================================
-describe("PUT /stores/rating/:id", () => {
+describe("PUT /ratingstores/:id", () => {
   test("200 success UPDATE Rating by ID", (done) => {
     request(app)
-      .put("/stores/rating/1")
+      .put("/ratingstores/1")
       .set("access_token", validCustomerToken)
       .send({ score: 4 })
       .then((response) => {
@@ -263,7 +263,7 @@ describe("PUT /stores/rating/:id", () => {
 
   test("401 update Rating with invalid token", (done) => {
     request(app)
-      .put("/stores/rating/1")
+      .put("/ratingstores/1")
       .set("access_token", invalidToken)
       .send({ score: 4 })
       .then((response) => {
@@ -280,7 +280,7 @@ describe("PUT /stores/rating/:id", () => {
   
   test("401 update Rating without token", (done) => {
     request(app)
-      .put("/stores/rating/1")
+      .put("/ratingstores/1")
       .send({ score: 4 })
       .then((response) => {
         const { body, status } = response
@@ -296,7 +296,7 @@ describe("PUT /stores/rating/:id", () => {
   
   test("403 update Rating with incorrect User ID", (done) => {
     request(app)
-      .put("/stores/rating/1")
+      .put("/ratingstores/1")
       .set("access_token", validSellerToken)
       .send({ score: 4 })
       .then((response) => {
@@ -313,7 +313,7 @@ describe("PUT /stores/rating/:id", () => {
   
   test("404 update Order not in Database", (done) => {
     request(app)
-      .put("/stores/rating/99")
+      .put("/ratingstores/99")
       .set("access_token", validCustomerToken)
       .send({ score: 4 })
       .then((response) => {
@@ -330,10 +330,10 @@ describe("PUT /stores/rating/:id", () => {
 })
 
 // DELETE RATING BY ID ==================================================
-describe("DELETE /stores/rating/:id", () => {
+describe("DELETE /ratingstores/:id", () => {
   test("401 delete Rating with invalid token", (done) => {
     request(app)
-      .delete("/stores/rating/1")
+      .delete("/ratingstores/1")
       .set("access_token", invalidToken)
       .then((response) => {
         const { body, status } = response
@@ -349,7 +349,7 @@ describe("DELETE /stores/rating/:id", () => {
   
   test("401 delete Rating without token", (done) => {
     request(app)
-      .delete("/stores/rating/1")
+      .delete("/ratingstores/1")
       .then((response) => {
         const { body, status } = response
 
@@ -364,7 +364,7 @@ describe("DELETE /stores/rating/:id", () => {
 
   test("403 delete Rating with incorrect User ID", (done) => {
     request(app)
-      .delete("/stores/rating/1")
+      .delete("/ratingstores/1")
       .set("access_token", validSellerToken)
       .then((response) => {
         const { body, status } = response
@@ -380,7 +380,7 @@ describe("DELETE /stores/rating/:id", () => {
 
   test("404 delete Rating not in Database", (done) => {
     request(app)
-      .delete("/stores/rating/99")
+      .delete("/ratingstores/99")
       .set("access_token", validCustomerToken)
       .then((response) => {
         const { body, status } = response
@@ -396,7 +396,7 @@ describe("DELETE /stores/rating/:id", () => {
 
   test("200 success DELETE Rating by ID", (done) => {
     request(app)
-      .delete("/stores/rating/1")
+      .delete("/ratingstores/1")
       .set("access_token", validCustomerToken)
       .then((response) => {
         const { body, status } = response
