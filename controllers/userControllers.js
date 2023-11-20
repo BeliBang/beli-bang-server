@@ -35,10 +35,10 @@ class userControllers {
         throw { status: 400, message: "Password is required" };
       }
 
+      console.log(password);
       const user = await User.findOne({
         where: { email },
       });
-
       if (!user || !comparePassword(password, user.password)) {
         throw { status: 401, message: "Invalid email/password" };
       }

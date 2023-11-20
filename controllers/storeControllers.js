@@ -126,14 +126,52 @@ class storeControllers {
 
   static async updateStore(req, res, next) {
     try {
-      console.log(req.params.id);
-      const { name, imageUrl, description, status } = req.body;
-      console.log({ name });
-      await Store.update(
-        { name, imageUrl, description, status },
-        { where: { id: req.params.id } }
-      );
-      res.status(200).json({ message: "Success updating store information" });
+      const { name, description, status } = req.body;
+      const { id } = req.params;
+
+      if (!req.file) {
+        const store = await Store.findByPk(id);
+        if (!store) {
+          throw { status: 404, message: "Store Not Found" };
+        }
+
+        await store.update({ name, description, status });
+        res.status(200).json({ message: "Success updating store information" });
+      } else {
+        const store = await Store.findByPk(id);
+        if (!store) {
+          throw { status: 404, message: "Store Not Found" };
+        }
+        if (!name) {
+          throw { status: 400, message: "Name is required" };
+        }
+        if (!description) {
+          throw { status: 400, message: "Description is required" };
+        }
+
+        await imageKit.upload(
+          {
+            file: req.file.buffer.toString("base64"),
+            fileName: `${Date.now()}_${req.file.originalname}`,
+            folder: "BB_Store",
+            useUniqueFileName: false,
+          },
+          async function (err, fileResponse) {
+            if (err) {
+              return res.status(500).json({
+                message: "Error occured during photo upload. Please try again.",
+              });
+            }
+
+            await store.update({
+              name,
+              imageUrl: fileResponse.url,
+              description,
+            });
+            res.status(200).json({ message: "Success updating store information" });
+          }
+        );
+      }
     } catch (error) {
       next(error);
     }
