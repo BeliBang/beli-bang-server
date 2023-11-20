@@ -40,13 +40,28 @@ class orderControllers {
 
   static async findOrder(req, res, next) {
     try {
-      const order = await Order.findByPk(req.params.id, {
-        include: Store,
-      });
+      const order = await Order.findByPk(req.params.id);
       if (!order) {
         throw { status: 404, message: "Order Not Found" };
       }
-      res.status(200).json(order);
+
+      const id = order.StoreId;
+      const store = await Store.findByPk(id, {
+        include: [
+          {
+            model: User,
+            attributes: { exclude: ["createdAt", "updatedAt", "password"] },
+          },
+        ],
+      });
+
+      const customer = await User.findOne({ where: { id: order.UserId } });
+
+      if (!store || !customer) {
+        throw { status: 401, message: "Invalid store/customer" };
+      }
+
+      res.status(200).json({ store, customer });
     } catch (error) {
       next(error);
     }
