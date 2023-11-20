@@ -8,6 +8,7 @@ module.exports = {
     const users = require("../data/users.json");
     const stores = require("../data/stores.json");
     const foods = require("../data/foods.json");
+    const orders = require("../data/order.json");
 
     const dataUsers = users.map((el) => {
       delete el.id;
@@ -36,12 +37,24 @@ module.exports = {
       return el;
     });
 
+    const dataOrders = orders.map((el) => {
+      delete el.id;
+      el.createdAt = el.updatedAt = new Date();
+      return el;
+    });
+
     await queryInterface.bulkInsert("Users", dataUsers);
     await queryInterface.bulkInsert("Stores", dataStores);
     await queryInterface.bulkInsert("Food", dataFoods);
+    await queryInterface.bulkInsert("Orders", dataOrders);
   },
 
   async down(queryInterface, Sequelize) {
+    await queryInterface.bulkDelete("Orders", null, {
+      restartIdentity: true,
+      truncate: true,
+      cascade: true,
+    });
     await queryInterface.bulkDelete("Food", null, {
       restartIdentity: true,
       truncate: true,

@@ -3,18 +3,24 @@
     "id": 1,
     "StoreId": 1,
     "UserId": 3,
-    "status": "Success"
+    "status": "Canceled"
   },
   {
     "id": 2,
     "StoreId": 1,
     "UserId": 3,
-    "status": "Cancel"
+    "status": "Completed"
   },
   {
     "id": 3,
-    "StoreId": 1,
+    "StoreId": 2,
     "UserId": 3,
-    "status": "Process"
+    "status": "Canceled"
+  },
+  {
+    "id": 4,
+    "StoreId": 2,
+    "UserId": 3,
+    "status": "Completed"
   }
 ]

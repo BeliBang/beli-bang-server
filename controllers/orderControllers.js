@@ -19,7 +19,15 @@ class orderControllers {
     try {
       const id = req.user.id;
 
-      const store = await Store.findOne({ where: { UserId: id } });
+      const store = await Store.findOne({
+        where: { UserId: id },
+        include: [
+          {
+            model: User,
+            attributes: { exclude: ["createdAt", "updatedAt", "password"] },
+          },
+        ],
+      });
       const orders = await Order.findAll({
         where: { StoreId: store.id },
         include: [
@@ -32,7 +40,9 @@ class orderControllers {
       if (orders.length == 0) {
         throw { status: 404, message: "No order has been made" };
       }
-      res.status(200).json(orders);
+
+      const locationSeller = store.User.location
+      res.status(200).json({locationSeller, orders} );
     } catch (error) {
       next(error);
     }
@@ -47,6 +57,7 @@ class orderControllers {
 
       const id = order.StoreId;
       const store = await Store.findByPk(id, {
+        attributes: { exclude: ["createdAt", "updatedAt"] },
         include: [
           {
             model: User,
@@ -55,7 +66,10 @@ class orderControllers {
         ],
       });
 
-      const customer = await User.findOne({ where: { id: order.UserId } });
+      const customer = await User.findOne({
+        attributes: { exclude: ["createdAt", "updatedAt", "password"] },
+        where: { id: order.UserId },
+      });
 
       if (!store || !customer) {
         throw { status: 401, message: "Invalid store/customer" };
