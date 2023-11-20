@@ -1,9 +1,9 @@
-const { comparePassword } = require("../helpers/bcrypt");
+const { comparePassword, hashPassword } = require("../helpers/bcrypt");
 const imageKit = require("../helpers/imageKit");
 const { signToken } = require("../helpers/jwt");
 const { User, Sequelize } = require("../models");
-const axios = require("axios");
-const redis = require("../helpers/redis");
+// const axios = require("axios");
+// const redis = require("../helpers/redis");
 
 class userControllers {
   static async register(req, res, next) {
@@ -28,7 +28,7 @@ class userControllers {
 
   static async login(req, res, next) {
     try {
-      const { email, password, tokenNotification } = req.body;
+      const { email, password } = req.body;
       if (!email) {
         throw { status: 400, message: "Email is required" };
       }
@@ -113,8 +113,8 @@ class userControllers {
       if (oldPassword == newPassword) {
         throw { status: 401, message: "Cannot use the old password" };
       }
-
-      await User.update({ password: newPassword }, { where: { id } });
+      const hashing = hashPassword(newPassword)
+      await User.update({ password: hashing }, { where: { id } });
 
       res.status(200).json({ message: "Success Edit Password" });
     } catch (error) {

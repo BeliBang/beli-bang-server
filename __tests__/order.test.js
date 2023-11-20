@@ -3,7 +3,7 @@ const app = require("../app")
 const { User, Store, Order, sequelize } = require("../models")
 const { signToken } = require("../helpers/jwt")
 
-let validSellerToken, validCustomerToken, invalidToken, orderId
+let validSellerToken, validSellerToken2, validSellerToken3, validCustomerToken, invalidToken, orderId
 
 const dataSeller = {
   username: "Seller",
@@ -12,7 +12,39 @@ const dataSeller = {
   role: "Seller",
   phoneNumber: 12345,
   address: "Adress",
-  profilePicture: "Image"
+  profilePicture: "Image",
+  location: {
+    "type": "Point",
+    "coordinates": [ 107.59278847659893, -6.942981263106864 ]
+  }
+}
+
+const dataSeller2 = {
+  username: "Seller2",
+  email: "seller2@mail.com",
+  password: "seller2",
+  role: "Seller",
+  phoneNumber: 12345,
+  address: "Adress",
+  profilePicture: "Image",
+  location: {
+    "type": "Point",
+    "coordinates": [ 107.59278847659893, -6.942981263106864 ]
+  }
+}
+
+const dataSeller3 = {
+  username: "Seller3",
+  email: "seller3@mail.com",
+  password: "seller3",
+  role: "Seller",
+  phoneNumber: 12345,
+  address: "Adress",
+  profilePicture: "Image",
+  location: {
+    "type": "Point",
+    "coordinates": [ 107.59278847659893, -6.942981263106864 ]
+  }
 }
 
 const dataCustomer = {
@@ -22,7 +54,11 @@ const dataCustomer = {
   role: "Customer",
   phoneNumber: 12345,
   address: "Adress",
-  profilePicture: "Image"
+  profilePicture: "Image",
+  location: {
+    "type": "Point",
+    "coordinates": [ 107.59278847659893, -6.942981263106864 ]
+  }
 }
 
 const dataStore = {
@@ -54,6 +90,22 @@ beforeAll((done) => {
     })
     .then((order) => {
       orderId = order.id
+      return User.create(dataSeller2)
+    })
+    .then((seller2) => {
+      validSellerToken2 = signToken({ id: seller2.id, email: seller2.email })
+      return User.create(dataSeller3)
+    })
+    .then((seller3) => {
+      validSellerToken3 = signToken({ id: seller3.id, email: seller3.email })
+      dataStore.UserId = seller3.id
+      return Store.create(dataStore)
+    })
+    .then((store3) => {
+      dataOrder.UserId = store3.id
+      return Order.create(dataOrder)
+    })
+    .then(() => {
       done()
     })
     .catch((err) => {
@@ -80,7 +132,7 @@ afterAll(async () => {
 })
 
 // SHOW ALL ORDER BY USER
-describe("GET /orders", () => {
+describe("GET /orders/customer", () => {
   test("200 success get all User's orders", (done) => {
     request(app)
       .get("/orders/customer")
@@ -113,7 +165,7 @@ describe("GET /orders", () => {
         done(err)
       })
   })
-  
+
   test("401 get User's order without token", (done) => {
     request(app)
       .get("/orders/customer")
@@ -135,7 +187,89 @@ describe("GET /orders", () => {
       .set("access_token", validSellerToken)
       .then((response) => {
         const { body, status } = response
- 
+
+        expect(status).toBe(404)
+        expect(body).toHaveProperty("message", "No order has been made")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+})
+
+// SHOW ALL ORDER BY SELLER
+describe("GET /orders/seller", () => {
+  test("200 success get all Seller's orders", (done) => {
+    request(app)
+      .get("/orders/seller")
+      .set("access_token", validSellerToken)
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(200)
+        expect(body).toBeInstanceOf(Object)
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("401 get Seller's order with invalid token", (done) => {
+    request(app)
+      .get("/orders/seller")
+      .set("access_token", invalidToken)
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Invalid token");
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("401 get Seller's order without token", (done) => {
+    request(app)
+      .get("/orders/seller")
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Invalid token");
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("404 get order of seller without store", (done) => {
+    request(app)
+      .get("/orders/seller")
+      .set("access_token", validSellerToken2)
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(404)
+        expect(body).toHaveProperty("message", "Store not found")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("404 get Seller's order is empty", (done) => {
+    request(app)
+      .get("/orders/seller")
+      .set("access_token", validSellerToken3)
+      .then((response) => {
+        const { body, status } = response
+
         expect(status).toBe(404)
         expect(body).toHaveProperty("message", "No order has been made")
         done()
@@ -179,7 +313,7 @@ describe("GET /orders/:id", () => {
         done(err)
       })
   })
-  
+
   test("401 get Order without token", (done) => {
     request(app)
       .get(`/orders/${orderId}`)
@@ -201,7 +335,7 @@ describe("GET /orders/:id", () => {
       .set("access_token", validCustomerToken)
       .then((response) => {
         const { body, status } = response
- 
+
         expect(status).toBe(404)
         expect(body).toHaveProperty("message", "Order Not Found")
         done()
@@ -240,7 +374,7 @@ describe("POST /orders", () => {
       })
       .then((response) => {
         const { body, status } = response
- 
+
         expect(status).toBe(400)
         expect(body).toHaveProperty("message", "Store ID is required")
         done()
@@ -266,7 +400,7 @@ describe("POST /orders", () => {
         done(err)
       })
   })
-  
+
   test("401 post Order without token", (done) => {
     request(app)
       .post("/orders")
@@ -290,7 +424,7 @@ describe("PUT /orders/:id", () => {
     request(app)
       .put(`/orders/${orderId}`)
       .set("access_token", validSellerToken)
-      .send({ status: 'Success'})
+      .send({ status: 'Success' })
       .then((response) => {
         const { body, status } = response
 
@@ -305,9 +439,9 @@ describe("PUT /orders/:id", () => {
 
   test("401 update Order with invalid token", (done) => {
     request(app)
-    .put(`/orders/${orderId}`)
+      .put(`/orders/${orderId}`)
       .set("access_token", invalidToken)
-      .send({ status: 'Success'})
+      .send({ status: 'Success' })
       .then((response) => {
         const { body, status } = response
 
@@ -319,11 +453,11 @@ describe("PUT /orders/:id", () => {
         done(err)
       })
   })
-  
+
   test("401 update Order without token", (done) => {
     request(app)
       .put(`/orders/${orderId}`)
-      .send({ status: 'Success'})
+      .send({ status: 'Success' })
       .then((response) => {
         const { body, status } = response
 
@@ -335,12 +469,12 @@ describe("PUT /orders/:id", () => {
         done(err)
       })
   })
-  
+
   test("403 update Order without Seller role", (done) => {
     request(app)
       .put(`/orders/${orderId}`)
       .set("access_token", validCustomerToken)
-      .send({ status: 'Success'})
+      .send({ status: 'Success' })
       .then((response) => {
         const { body, status } = response
 
@@ -352,12 +486,12 @@ describe("PUT /orders/:id", () => {
         done(err)
       })
   })
-  
+
   test("404 update Order not in Database", (done) => {
     request(app)
       .put("/orders/99")
       .set("access_token", validSellerToken)
-      .send({ status: 'Success'})
+      .send({ status: 'Success' })
       .then((response) => {
         const { body, status } = response
 
@@ -404,7 +538,7 @@ describe("DELETE /orders/:id", () => {
         done(err)
       })
   })
-  
+
   test("401 delete Order without token", (done) => {
     request(app)
       .delete(`/orders/${orderId}`)
@@ -426,7 +560,7 @@ describe("DELETE /orders/:id", () => {
       .set("access_token", validCustomerToken)
       .then((response) => {
         const { body, status } = response
- 
+
         expect(status).toBe(404)
         expect(body).toHaveProperty("message", "Order Not Found")
         done()

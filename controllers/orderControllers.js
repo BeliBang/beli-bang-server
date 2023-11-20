@@ -1,6 +1,6 @@
-const redis = require("../helpers/redis");
+// const redis = require("../helpers/redis");
 const { Store, User, Food, Order } = require("../models");
-const axios = require("axios");
+// const axios = require("axios");
 
 class orderControllers {
   static async showOrderCustomers(req, res, next) {
@@ -36,7 +36,7 @@ class orderControllers {
     }
   }
 
-  static async showOrderSellers(req, res, next) {
+  static async showOrderSellers(req, res, next) { //40-70
     try {
       const id = req.user.id;
 
@@ -49,6 +49,11 @@ class orderControllers {
           },
         ],
       });
+
+      if (!store) {
+        throw { status: 404, message: "Store not found" };
+      }
+
       const orders = await Order.findAll({
         order: [["status", "DESC"]],
         where: { StoreId: store.id },
@@ -95,7 +100,7 @@ class orderControllers {
       });
 
       if (!store || !customer) {
-        throw { status: 401, message: "Invalid store/customer" };
+        throw { status: 401, message: "Invalid store/customer" };  //98
       }
 
       res.status(200).json({ store, customer });
