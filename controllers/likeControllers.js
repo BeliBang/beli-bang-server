@@ -1,13 +1,20 @@
-const { Like } = require('../models')
+const { Store, Like } = require('../models')
 
 class likeControllers {
   static async findLikes(req, res, next) {
     try {
       const { storeId } = req.params
 
+      const store = await Store.findByPk(storeId)
+      if (!store) {
+        throw { status: 404, message: "Store not found" }
+      }
       const likes = await Like.findAll({
         where: {StoreId: storeId}
       })
+      if (likes.length == 0) {
+        throw { status: 404, message: "Haven't got any like yet" }
+      }
       res.status(200).json(likes)
     } catch (error) {
       next (error)
@@ -22,10 +29,10 @@ class likeControllers {
         where: { StoreId: storeId, UserId: req.user.id }
       })
       if (checker) {
-        throw { status: 409, message: "Like already added" }
+        throw { status: 401, message: "Like already added" }
       }
       await Like.create({ StoreId: storeId, UserId: req.user.id })
-      res.status(201).json("Success adding like")
+      res.status(201).json({ message: "Success adding like" })
     } catch (error) {
       next (error)
     }
@@ -43,7 +50,7 @@ class likeControllers {
       }
       await Like.destroy({where: { id } })
       
-      res.status(200).json("Like has been removed")
+      res.status(200).json({ message: "Like has been removed"})
     } catch (error) {
       next (error)
     }

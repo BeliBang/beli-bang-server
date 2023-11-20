@@ -45,27 +45,17 @@ const dataStore = {
 beforeAll((done) => {
   User.create(dataSeller1)
     .then((seller1) => {
-      validSellerToken1 = signToken({
-        id: seller1.id,
-        email: seller1.email,
-      })
+      validSellerToken1 = signToken({ id: seller1.id, email: seller1.email })
       dataStore.UserId = seller1.id
       return User.create(dataSeller2)
     })
     .then((seller2) => {
-      validSellerToken2 = signToken({
-        id: seller2.id,
-        email: seller2.email,
-      })
+      validSellerToken2 = signToken({ id: seller2.id, email: seller2.email })
       return User.create(dataCustomer)
     })
     .then((customer) => {
-      validCustomerToken = signToken({
-        id: customer.id,
-        email: customer.email,
-      })
-      invalidToken =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIwMUBtYWlsLmNvbSIsImlkIjoxLCJpYXQiOjE2MjI2MDk2NTF9.gShAB2qaCUjlnvNuM1MBWfE"
+      validCustomerToken = signToken({ id: customer.id, email: customer.email })
+      invalidToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIwMUBtYWlsLmNvbSIsImlkIjoxLCJpYXQiOjE2MjI2MDk2NTF9.gShAB2qaCUjlnvNuM1MBWfE"
       return Store.create(dataStore)
     .then((store) => {
       storeId = store.id

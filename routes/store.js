@@ -5,7 +5,7 @@ const { sellerAuthorization, ownerAuthorization } = require("../middlewares/auth
 const upload = require("../middlewares/multer");
 
 router.get("/stores", storeControllers.showStores);
-router.get("/stores/seller", storeControllers.findStoreUser);
+router.get("/stores/seller", sellerAuthorization, storeControllers.findStoreUser);
 router.get("/stores/:id", storeControllers.findStore);
 
 router.post("/stores", sellerAuthorization, upload.single('imageUrl'), storeControllers.createStore);

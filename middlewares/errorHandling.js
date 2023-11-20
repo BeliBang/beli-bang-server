@@ -5,20 +5,15 @@ async function errorHandling(error, req, res, next) {
   switch (error.name) {
     case "SequelizeValidationError":
     case "SequelizeUniqueConstraintError":
-      status = 400;
+      status = 400
       message = error.errors[0].message;
-      break;
+      break
     case "JsonWebTokenError":
-      status = 401;
+      status = 401
       message = "Invalid token"
-      break;
-    case "NotFound":
-      status = 404;
-      message = "Data not found"
-      break;
+      break
   }
-
   res.status(status).json({ message });
 }
 
-module.exports = errorHandling;
+module.exports = errorHandling
