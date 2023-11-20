@@ -11,8 +11,7 @@ const dataSeller1 = {
   password: "seller1",
   role: "Seller",
   phoneNumber: "12345",
-  address: "Adress",
-  profilePicture: "Image"
+  address: "Adress"
 }
 
 const dataSeller2 = {
@@ -21,8 +20,7 @@ const dataSeller2 = {
   password: "seller2",
   role: "Seller",
   phoneNumber: "12345",
-  address: "Adress",
-  profilePicture: "Image"
+  address: "Adress"
 }
 
 const dataCustomer = {
@@ -31,15 +29,14 @@ const dataCustomer = {
   password: "customer",
   role: "Customer",
   phoneNumber: "12345",
-  address: "Adress",
-  profilePicture: "Image"
+  address: "Adress"
 }
 
 const dataStore = {
   name: "Store",
   status: true,
   description: "Description",
-  imageUrl: "Image"
+  imageUrl: "image"
 }
 
 beforeAll((done) => {
@@ -47,6 +44,10 @@ beforeAll((done) => {
     .then((seller1) => {
       validSellerToken1 = signToken({ id: seller1.id, email: seller1.email })
       dataStore.UserId = seller1.id
+      return Store.create(dataStore)
+    })
+    .then((store) => {
+      storeId = store.id
       return User.create(dataSeller2)
     })
     .then((seller2) => {
@@ -56,11 +57,7 @@ beforeAll((done) => {
     .then((customer) => {
       validCustomerToken = signToken({ id: customer.id, email: customer.email })
       invalidToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIwMUBtYWlsLmNvbSIsImlkIjoxLCJpYXQiOjE2MjI2MDk2NTF9.gShAB2qaCUjlnvNuM1MBWfE"
-      return Store.create(dataStore)
-    .then((store) => {
-      storeId = store.id
       done()
-      })
     })
     .catch((err) => {
       done(err)
@@ -296,158 +293,189 @@ describe("GET /stores/seller", () => {
 })
 
 // CREATE STORE
-// describe("POST /stores", () => {
-//   test("201 success POST new Store", (done) => {
-//     request(app)
-//       .post("/stores")
-//       .set("access_token", validSellerToken2)
-//       .send({
-//         name: "Store2",
-//         description: "Description2",
-//         imageUrl: "Image"
-//       })
-//       .then((response) => {
-//         const { body, status } = response
+describe("POST /stores", () => {
+  test("201 success POST new Store", (done) => {
+    request(app)
+      .post("/stores")
+      .set("access_token", validSellerToken2)
+      .send({
+        name: "Store2",
+        description: "Description2"
+      })
+      .attach("imageUrl", "")
+      .then((response) => {
+        const { body, status } = response
 
-//         expect(status).toBe(201)
-//         expect(body).toHaveProperty("message", "Success creating store")
-//         done()
-//       })
-//       .catch((err) => {
-//         done(err)
-//       })
-//   })
+        expect(status).toBe(201)
+        expect(body).toHaveProperty("message", "Success creating store")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
 
-//   test("400 create Store without name", (done) => {
-//     request(app)
-//       .post("/stores")
-//       .set("access_token", validSellerToken2)
-//       .send({
-//         description: "Description",
-//         imageUrl: "Image"
-//       })
-//       .then((response) => {
-//         const { body, status } = response
+  test("400 create Store without name", (done) => {
+    request(app)
+      .post("/stores")
+      .set("access_token", validSellerToken2)
+      .send({ description: "Description2" })
+      .attach("imageUrl", "")
+      .then((response) => {
+        const { body, status } = response
  
-//         expect(status).toBe(400)
-//         expect(body).toHaveProperty("message", "Name is required")
-//         done()
-//       })
-//       .catch((err) => {
-//         done(err)
-//       })
-//   })
+        expect(status).toBe(400)
+        expect(body).toHaveProperty("message", "Name is required")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
   
-//   test("400 create Store without description", (done) => {
-//     request(app)
-//       .post("/stores")
-//       .set("access_token", validSellerToken2)
-//       .send({
-//         name: "Store",
-//         imageUrl: "Image"
-//       })
-//       .then((response) => {
-//         const { body, status } = response
+  test("400 create Store without description", (done) => {
+    request(app)
+      .post("/stores")
+      .set("access_token", validSellerToken2)
+      .send({ name: "Store2" })
+      .attach("imageUrl", "")
+      .then((response) => {
+        const { body, status } = response
  
-//         expect(status).toBe(400)
-//         expect(body).toHaveProperty("message", "Description is required")
-//         done()
-//       })
-//       .catch((err) => {
-//         done(err)
-//       })
-//   })
+        expect(status).toBe(400)
+        expect(body).toHaveProperty("message", "Description is required")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
   
-//   test("400 create Store without image", (done) => {
-//     request(app)
-//       .post("/stores")
-//       .set("access_token", validSellerToken2)
-//       .send({
-//         name: "Store",
-//         description: "Description"
-//       })
-//       .then((response) => {
-//         const { body, status } = response
+  test("400 create Store without image", (done) => {
+    request(app)
+      .post("/stores")
+      .set("access_token", validSellerToken2)
+      .send({
+        name: "Store2",
+        description: "Description2"
+      })
+      .then((response) => {
+        const { body, status } = response
  
-//         expect(status).toBe(400)
-//         expect(body).toHaveProperty("message", "Image store is required")
-//         done()
-//       })
-//       .catch((err) => {
-//         done(err)
-//       })
-//   })
+        expect(status).toBe(400)
+        expect(body).toHaveProperty("message", "Image store is required")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
   
-//   test("401 create Store with duplicate User ID", (done) => {
-//     request(app)
-//       .post("/stores")
-//       .set("access_token", validSellerToken2)
-//       .send(dataStore)
-//       .then((response) => {
-//         const { body, status } = response
+  test("401 create Store with duplicate User ID", (done) => {
+    request(app)
+      .post("/stores")
+      .set("access_token", validSellerToken2)
+      .send({
+        name: "Store2",
+        description: "Description2"
+      })
+      .attach("imageUrl", "")
+      .then((response) => {
+        const { body, status } = response
 
-//         expect(status).toBe(401)
-//         expect(body).toHaveProperty("message", "You already have a store")
-//         done()
-//       })
-//       .catch((err) => {
-//         done(err)
-//       })
-//   })
+        expect(status).toBe(401)
+        expect(body).toHaveProperty("message", "You already have a store")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
 
-//   test("401 create Order with invalid token", (done) => {
-//     request(app)
-//       .post("/stores")
-//       .set("access_token", invalidToken)
-//       .send(dataStore)
-//       .then((response) => {
-//         const { body, status } = response
+  test("401 create Order with invalid token", (done) => {
+    request(app)
+      .post("/stores")
+      .set("access_token", invalidToken)
+      .send({
+        name: "Store2",
+        description: "Description2"
+      })
+      .attach("imageUrl", "")
+      .then((response) => {
+        const { body, status } = response
 
-//         expect(status).toBe(401);
-//         expect(body).toHaveProperty("message", "Invalid token");
-//         done()
-//       })
-//       .catch((err) => {
-//         done(err)
-//       })
-//   })
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Invalid token");
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
   
-//   test("401 create Order without token", (done) => {
-//     request(app)
-//       .post("/stores")
-//       .send(dataStore)
-//       .then((response) => {
-//         const { body, status } = response
+  test("401 create Order without token", (done) => {
+    request(app)
+      .post("/stores")
+      .send({
+        name: "Store2",
+        description: "Description2"
+      })
+      .attach("imageUrl", "")
+      .then((response) => {
+        const { body, status } = response
 
-//         expect(status).toBe(401);
-//         expect(body).toHaveProperty("message", "Invalid token")
-//         done()
-//       })
-//       .catch((err) => {
-//         done(err)
-//       })
-//   })
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Invalid token")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
 
-//   test("403 create Store with customer role", (done) => {
-//     request(app)
-//       .get("/stores")
-//       .set("access_token", validCustomerToken)
-//       .then((response) => {
-//         const { body, status } = response
+  test("403 create Store with customer role", (done) => {
+    request(app)
+      .get("/stores")
+      .set("access_token", validCustomerToken)
+      .send({
+        name: "Store2",
+        description: "Description2"
+      })
+      .attach("imageUrl", "")
+      .then((response) => {
+        const { body, status } = response
 
-//         expect(status).toBe(403)
-//         expect(body).toHaveProperty("message", "Forbidden for the seller")
-//         done()
-//       })
-//       .catch((err) => {
-//         done(err)
-//       })
-//   })
-// })
+        expect(status).toBe(403)
+        expect(body).toHaveProperty("message", "Forbidden for the seller")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+})
 
 // UPDATE STORE
 describe("PUT /stores/:id", () => {
   test("200 success UPDATE Store by ID", (done) => {
+    request(app)
+      .put(`/stores/${storeId}`)
+      .set("access_token", validSellerToken1)
+      .send({ description: "Update description" })
+      .attach("imageUrl", "")
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(200)
+        expect(body).toHaveProperty("message", "Success updating store information")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("200 success UPDATE Store without image", (done) => {
     request(app)
       .put(`/stores/${storeId}`)
       .set("access_token", validSellerToken1)
@@ -469,6 +497,7 @@ describe("PUT /stores/:id", () => {
     .put(`/stores/${storeId}`)
       .set("access_token", invalidToken)
       .send({ description: "Update description" })
+      .attach("imageUrl", "")
       .then((response) => {
         const { body, status } = response
 
@@ -485,6 +514,7 @@ describe("PUT /stores/:id", () => {
     request(app)
       .put(`/stores/${storeId}`)
       .send({ description: "Update description" })
+      .attach("imageUrl", "")
       .then((response) => {
         const { body, status } = response
 
@@ -502,6 +532,7 @@ describe("PUT /stores/:id", () => {
       .put(`/stores/${storeId}`)
       .set("access_token", validCustomerToken)
       .send({ description: "Update description" })
+      .attach("imageUrl", "")
       .then((response) => {
         const { body, status } = response
 
@@ -519,6 +550,7 @@ describe("PUT /stores/:id", () => {
       .put(`/stores/${storeId}`)
       .set("access_token", validSellerToken2)
       .send({ description: "Update description" })
+      .attach("imageUrl", "")
       .then((response) => {
         const { body, status } = response
 
@@ -536,11 +568,63 @@ describe("PUT /stores/:id", () => {
       .put("/stores/99")
       .set("access_token", validSellerToken1)
       .send({ description: "Update description" })
+      .attach("imageUrl", "")
       .then((response) => {
         const { body, status } = response
 
         expect(status).toBe(404);
         expect(body).toHaveProperty("message", "Store Not Found")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("404 update Store without image and not in Database", (done) => {
+    request(app)
+      .put("/stores/99")
+      .set("access_token", validSellerToken1)
+      .send({ description: "Update description" })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(404);
+        expect(body).toHaveProperty("message", "Store Not Found")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("400 update Store without image and name", (done) => {
+    request(app)
+      .put(`/stores/${storeId}`)
+      .set("access_token", validSellerToken1)
+      .send({ description: "Update description" })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(400);
+        expect(body).toHaveProperty("message", "Name is required")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("400 update Store without image and description", (done) => {
+    request(app)
+      .put(`/stores/${storeId}`)
+      .set("access_token", validSellerToken1)
+      .send({ name: "Update name" })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(400);
+        expect(body).toHaveProperty("message", "Description is required")
         done()
       })
       .catch((err) => {

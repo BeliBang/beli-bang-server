@@ -1,20 +1,20 @@
-const { RatingFood, Store } = require('../models')
+const { RatingFood, Food } = require('../models')
 
 class ratingFoodControllers {
   static async findRating(req, res, next) {
     try {
       const { foodId } = req.params
 
-      const store = await Store.findByPk(storeId)
-      if (!store) {
-        throw { status: 404, message: "Store not found" }
+      const food = await Food.findByPk(foodId)
+      if (!food) {
+        throw { status: 404, message: "Food not found" }
       }
       const rating = await RatingFood.findAll({
         where: {FoodId: foodId}
       })
       if (rating.length == 0) {
         throw { status: 404, message: "Haven't got any rating yet" }
-      }   
+      }
       res.status(200).json(rating)
     } catch (error) {
       next (error)
@@ -30,10 +30,10 @@ class ratingFoodControllers {
         where: { FoodId: foodId, UserId: req.user.id }
       })
       if (checker) {
-        throw { status: 409, message: "Food already rated" }
+        throw { status: 401, message: "Food already rated" }
       }
       await RatingFood.create({ FoodId: foodId, UserId: req.user.id, score })
-      res.status(201).json("Success rating food")
+      res.status(201).json({ message: "Success rating food" })
     } catch (error) {
       next (error)
     }
@@ -68,7 +68,7 @@ class ratingFoodControllers {
         throw { status: 403, message: "Not authorized" }
       }
       await RatingFood.destroy({where: { id } })
-      
+
       res.status(200).json({ message: "Rating has been removed"})
     } catch (error) {
       next (error)

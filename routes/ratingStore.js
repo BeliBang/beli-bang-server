@@ -2,9 +2,9 @@ const express = require("express");
 const ratingStoreControllers = require("../controllers/ratingStoreControllers");
 const router = express.Router();
 
-router.get("/stores/rating/:storeId", ratingStoreControllers.findRating);
-router.post("/stores/rating/:storeId", ratingStoreControllers.createRating);
-router.put("/stores/rating/:id", ratingStoreControllers.updateRating);
-router.delete("/stores/rating/:id", ratingStoreControllers.deleteRating);
+router.get("/ratingstores/:storeId", ratingStoreControllers.findRating);
+router.post("/ratingstores/:storeId", ratingStoreControllers.createRating);
+router.put("/ratingstores/:id", ratingStoreControllers.updateRating);
+router.delete("/ratingstores/:id", ratingStoreControllers.deleteRating);
 
 module.exports = router;

@@ -10,7 +10,7 @@ const dataSeller = {
   email: "seller@mail.com",
   password: "seller",
   role: "Seller",
-  phoneNumber: 12345,
+  phoneNumber: "12345",
   address: "Adress"
 }
 
@@ -19,7 +19,7 @@ const dataCustomer = {
   email: "customer@mail.com",
   password: "customer",
   role: "Customer",
-  phoneNumber: 12345,
+  phoneNumber: "12345",
   address: "Adress"
 }
 
@@ -419,13 +419,571 @@ describe("GET /users/:id", () => {
 
   test("404 fetching User not in Database", (done) => {
     request(app)
-      .get("/users/9")
+      .get("/users/99")
       .set("access_token", validSellerToken)
       .then((response) => {
         const { body, status } = response
 
         expect(status).toBe(404)
         expect(body).toHaveProperty("message", "User Not Found")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+})
+
+// UPDATE USERNAME
+describe("PATCH /users/username", () => {
+  test("400 update User without username", (done) => {
+    request(app)
+      .patch("/users/username")
+      .set("access_token", validCustomerToken)
+      .send({ username: "" })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(400);
+        expect(body).toHaveProperty("message", "Username is required")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("401 update Username with invalid token", (done) => {
+    request(app)
+      .patch("/users/username")
+      .set("access_token", invalidToken)
+      .send({ username: "New username" })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Invalid token");
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+  
+  test("401 update Username without token", (done) => {
+    request(app)
+      .patch("/users/username")
+      .send({ username: 'New username' })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Invalid token")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("200 success update Username", (done) => {
+    request(app)
+      .patch("/users/username")
+      .set("access_token", validCustomerToken)
+      .send({ username: 'New username' })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(200)
+        expect(body).toHaveProperty("message", "Success Edit Username");
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+})
+
+// UPDATE PASSWORD
+describe("PATCH /users/password", () => {
+  test("400 update User without old password", (done) => {
+    request(app)
+      .patch("/users/password")
+      .set("access_token", validCustomerToken)
+      .send({ 
+        newPassword: "newcustomer",
+        confirmPassword : "newcustomer"
+      })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(400);
+        expect(body).toHaveProperty("message", "Password is required")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+  
+  test("400 update User without new password", (done) => {
+    request(app)
+      .patch("/users/password")
+      .set("access_token", validCustomerToken)
+      .send({
+        oldPassword: "customer",
+        newPassword: "",
+        confirmPassword : ""
+      })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(400);
+        expect(body).toHaveProperty("message", "Password is required")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("400 update User with new password under 5 characters", (done) => {
+    request(app)
+      .patch("/users/password")
+      .set("access_token", validCustomerToken)
+      .send({
+        oldPassword: "customer",
+        newPassword: "new",
+        confirmPassword : "new"
+      })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(400);
+        expect(body).toHaveProperty("message", "Minimum password is 5 characters")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+  
+  test("400 update User without matching new password", (done) => {
+    request(app)
+      .patch("/users/password")
+      .set("access_token", validCustomerToken)
+      .send({
+        oldPassword: "customer",
+        newPassword: "newcustomer",
+        confirmPassword : "customer"
+      })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(400);
+        expect(body).toHaveProperty("message", "Password does not match")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+  
+  test("401 update User with incorrect old password", (done) => {
+    request(app)
+      .patch("/users/password")
+      .set("access_token", validCustomerToken)
+      .send({
+        oldPassword: "wrong",
+        newPassword: "newcustomer",
+        confirmPassword : "newcustomer"
+      })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Invalid password")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+  
+  test("401 update User with same new password", (done) => {
+    request(app)
+      .patch("/users/password")
+      .set("access_token", validCustomerToken)
+      .send({
+        oldPassword: "customer",
+        newPassword: "customer",
+        confirmPassword : "customer"
+      })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Cannot use the old password")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("401 update Username with invalid token", (done) => {
+    request(app)
+      .patch("/users/password")
+      .set("access_token", invalidToken)
+      .send({ 
+        oldPassword: "customer",
+        newPassword: "newcustomer",
+        confirmPassword : "newcustomer"
+      })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Invalid token");
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+  
+  test("401 update Username without token", (done) => {
+    request(app)
+      .patch("/users/password")
+      .send({ 
+        oldPassword: "customer",
+        newPassword: "newcustomer",
+        confirmPassword : "newcustomer"
+      })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Invalid token")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("200 success update User password", (done) => {
+    request(app)
+      .patch("/users/password")
+      .set("access_token", validCustomerToken)
+      .send({ 
+        oldPassword: "customer",
+        newPassword: "newcustomer",
+        confirmPassword : "newcustomer"
+      })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(200)
+        expect(body).toHaveProperty("message", "Success Edit Password");
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+})
+
+// UPDATE PHONE NUMBER
+describe("PATCH /users/phonenumber", () => {
+  test("400 update User without phone number", (done) => {
+    request(app)
+      .patch("/users/phonenumber")
+      .set("access_token", validCustomerToken)
+      .send({ phoneNumber: "" })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(400);
+        expect(body).toHaveProperty("message", "Phone Number is required")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("401 update User phone with invalid token", (done) => {
+    request(app)
+      .patch("/users/phonenumber")
+      .set("access_token", invalidToken)
+      .send({ phoneNumber: "1234" })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Invalid token");
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+  
+  test("401 update User phone without token", (done) => {
+    request(app)
+      .patch("/users/phonenumber")
+      .send({ phoneNumber: "1234" })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Invalid token")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("200 success update User phone number", (done) => {
+    request(app)
+      .patch("/users/phonenumber")
+      .set("access_token", validCustomerToken)
+      .send({ phoneNumber: "1234" })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(200)
+        expect(body).toHaveProperty("message", "Success Edit Phone Number");
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+})
+
+// UPDATE ADDRESS
+describe("PATCH /users/address", () => {
+  test("400 update User without address", (done) => {
+    request(app)
+      .patch("/users/address")
+      .set("access_token", validCustomerToken)
+      .send({ address: "" })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(400);
+        expect(body).toHaveProperty("message", "Address is required")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("401 update User address with invalid token", (done) => {
+    request(app)
+      .patch("/users/address")
+      .set("access_token", invalidToken)
+      .send({ address: "New address" })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Invalid token");
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+  
+  test("401 update User address without token", (done) => {
+    request(app)
+      .patch("/users/address")
+      .send({ address: "New address" })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Invalid token")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("200 success update User address", (done) => {
+    request(app)
+      .patch("/users/address")
+      .set("access_token", validCustomerToken)
+      .send({ address: "New address" })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(200)
+        expect(body).toHaveProperty("message", "Success Edit Address");
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+})
+
+// UPDATE PROFILE PICTURE
+describe("PATCH /users/profilepicture", () => {
+  test("400 update User without profile picture", (done) => {
+    request(app)
+      .patch("/users/profilepicture")
+      .set("access_token", validCustomerToken)
+      .attach("profilePicture", "")
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(400);
+        expect(body).toHaveProperty("message", "Profile Picture is required")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("401 update User profile picture with invalid token", (done) => {
+    request(app)
+      .patch("/users/profilepicture")
+      .set("access_token", invalidToken)
+      .attach("profilePicture", "")
+      .attach()
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Invalid token");
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+  
+  test("401 update User profile picture without token", (done) => {
+    request(app)
+      .patch("/users/profilepicture")
+      .attach("profilePicture", "")
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Invalid token")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  // test("200 success update User profile picture", (done) => {
+  //   request(app)
+  //     .patch("/users/profilepicture")
+  //     .set("access_token", validCustomerToken)
+  //     .attach("profilePicture", "./test.jpg")
+  //     .then((response) => {
+  //       const { body, status } = response
+
+  //       expect(status).toBe(200)
+  //       expect(body).toHaveProperty("message", "Success Edit Profile Picture");
+  //       done()
+  //     })
+  //     .catch((err) => {
+  //       done(err)
+  //     })
+  // })
+})
+
+// UPDATE LOCATION
+describe("PATCH /users/location", () => {
+  test("400 update User location without longitude", (done) => {
+    request(app)
+      .patch("/users/location")
+      .set("access_token", validCustomerToken)
+      .send({ latitude: "-6" })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(400);
+        expect(body).toHaveProperty("message", "Location is required")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("400 update User location without latitude", (done) => {
+    request(app)
+      .patch("/users/location")
+      .set("access_token", validCustomerToken)
+      .send({ longitude: "107" })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(400);
+        expect(body).toHaveProperty("message", "Location is required")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("401 update User location with invalid token", (done) => {
+    request(app)
+      .patch("/users/location")
+      .set("access_token", invalidToken)
+      .send({ longitude: "107", latitude: "-6" })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Invalid token");
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+  
+  test("401 update User location without token", (done) => {
+    request(app)
+      .patch("/users/location")
+      .send({ longitude: "107", latitude: "-6" })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Invalid token")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("200 success update User location", (done) => {
+    request(app)
+      .patch("/users/location")
+      .set("access_token", validCustomerToken)
+      .send({ longitude: "107", latitude: "-6" })
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(200)
+        expect(body).toHaveProperty("message", "Success Edit Location");
         done()
       })
       .catch((err) => {

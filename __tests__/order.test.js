@@ -83,7 +83,7 @@ afterAll(async () => {
 describe("GET /orders", () => {
   test("200 success get all User's orders", (done) => {
     request(app)
-      .get("/orders")
+      .get("/orders/customer")
       .set("access_token", validCustomerToken)
       .then((response) => {
         const { body, status } = response
@@ -100,7 +100,7 @@ describe("GET /orders", () => {
 
   test("401 get User's order with invalid token", (done) => {
     request(app)
-      .get("/orders")
+      .get("/orders/customer")
       .set("access_token", invalidToken)
       .then((response) => {
         const { body, status } = response
@@ -116,7 +116,7 @@ describe("GET /orders", () => {
   
   test("401 get User's order without token", (done) => {
     request(app)
-      .get("/orders")
+      .get("/orders/customer")
       .then((response) => {
         const { body, status } = response
 
@@ -131,7 +131,7 @@ describe("GET /orders", () => {
 
   test("404 get User's order who has not made an order", (done) => {
     request(app)
-      .get("/orders")
+      .get("/orders/customer")
       .set("access_token", validSellerToken)
       .then((response) => {
         const { body, status } = response

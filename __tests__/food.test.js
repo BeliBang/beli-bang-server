@@ -3,7 +3,7 @@ const app = require("../app")
 const { User, Store, Food, sequelize } = require("../models")
 const { signToken } = require("../helpers/jwt")
 
-let validSellerToken1, validSellerToken2, validCustomerToken, invalidToken, foodId
+let validSellerToken1, validSellerToken2, validCustomerToken, invalidToken, foodId, storeId
 
 const dataSeller1 = {
   username: "Seller1",
@@ -54,6 +54,15 @@ beforeAll((done) => {
     .then((seller1) => {
       validSellerToken1 = signToken({ id: seller1.id, email: seller1.email })
       dataStore.UserId = seller1.id
+      return Store.create(dataStore)
+    })
+    .then((store) => {
+      dataFood.StoreId = store.id
+      storeId = store.id
+      return Food.create(dataFood)
+    })
+    .then((food) => {
+      foodId = food.id
       return User.create(dataSeller2)
     })
     .then((seller2) => {
@@ -63,14 +72,6 @@ beforeAll((done) => {
     .then((customer) => {
       validCustomerToken = signToken({ id: customer.id, email: customer.email })
       invalidToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIwMUBtYWlsLmNvbSIsImlkIjoxLCJpYXQiOjE2MjI2MDk2NTF9.gShAB2qaCUjlnvNuM1MBWfE"
-      return Store.create(dataStore)
-    })
-    .then((store) => {
-      dataFood.StoreId = store.id
-      return Food.create(dataFood)
-    })
-    .then((food) => {
-      foodId = food.id
       done()
     })
     .catch((err) => {
@@ -104,6 +105,7 @@ describe("POST /foods", () => {
   //     .post("/foods")
   //     .set("access_token", validSellerToken1)
   //     .send(dataFood)
+  //     .attach("imageUrl", "")
   //     .then((response) => {
   //       const { body, status } = response
 
@@ -116,95 +118,103 @@ describe("POST /foods", () => {
   //     })
   // })
 
-  // test("400 create Food without name", (done) => {
-  //   request(app)
-  //     .post("/foods")
-  //     .set("access_token", validSellerToken1)
-  //     .send({
-  //       price: 15000,
-  //       description: "Food description",
-  //       imageUrl: "Image"
-  //     })
-  //     .then((response) => {
-  //       const { body, status } = response
+  test("400 create Food without name", (done) => {
+    request(app)
+      .post("/foods")
+      .set("access_token", validSellerToken1)
+      .send({
+        price: 15000,
+        description: "Food description",
+        imageUrl: "Image",
+        StoreId: storeId
+      })
+      .attach("imageUrl", "")
+      .then((response) => {
+        const { body, status } = response
  
-  //       expect(status).toBe(400)
-  //       expect(body).toHaveProperty("message", "Name is required")
-  //       done()
-  //     })
-  //     .catch((err) => {
-  //       done(err)
-  //     })
-  // })
+        expect(status).toBe(400)
+        expect(body).toHaveProperty("message", "Name is required")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
   
-  // test("400 create Food without description", (done) => {
-  //   request(app)
-  //     .post("/foods")
-  //     .set("access_token", validSellerToken1)
-  //     .send({
-  //       name: "Food",
-  //       price: 15000,
-  //       imageUrl: "Image"
-  //     })
-  //     .then((response) => {
-  //       const { body, status } = response
+  test("400 create Food without description", (done) => {
+    request(app)
+      .post("/foods")
+      .set("access_token", validSellerToken1)
+      .send({
+        name: "Food",
+        price: 15000,
+        imageUrl: "Image",
+        StoreId: storeId
+      })
+      .attach("imageUrl", "")
+      .then((response) => {
+        const { body, status } = response
  
-  //       expect(status).toBe(400)
-  //       expect(body).toHaveProperty("message", "Description is required")
-  //       done()
-  //     })
-  //     .catch((err) => {
-  //       done(err)
-  //     })
-  // })
+        expect(status).toBe(400)
+        expect(body).toHaveProperty("message", "Description is required")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
   
-  // test("400 create Food without price", (done) => {
-  //   request(app)
-  //     .post("/foods")
-  //     .set("access_token", validSellerToken1)
-  //     .send({
-  //       name: "Food",
-  //       description: "Food description",
-  //       imageUrl: "Image"
-  //     })
-  //     .then((response) => {
-  //       const { body, status } = response
+  test("400 create Food without price", (done) => {
+    request(app)
+      .post("/foods")
+      .set("access_token", validSellerToken1)
+      .send({
+        name: "Food",
+        description: "Food description",
+        imageUrl: "Image",
+        StoreId: storeId
+      })
+      .attach("imageUrl", "")
+      .then((response) => {
+        const { body, status } = response
  
-  //       expect(status).toBe(400)
-  //       expect(body).toHaveProperty("message", "Price is required")
-  //       done()
-  //     })
-  //     .catch((err) => {
-  //       done(err)
-  //     })
-  // })
+        expect(status).toBe(400)
+        expect(body).toHaveProperty("message", "Price is required")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
   
-  // test("400 create Food without image", (done) => {
-  //   request(app)
-  //     .post("/foods")
-  //     .set("access_token", validSellerToken1)
-  //     .send({
-  //       name: "Food",
-  //       price: 15000,
-  //       description: "Food description"
-  //     })
-  //     .then((response) => {
-  //       const { body, status } = response
+  test("400 create Food without image", (done) => {
+    request(app)
+      .post("/foods")
+      .set("access_token", validSellerToken1)
+      .send({
+        name: "Food",
+        price: 15000,
+        description: "Food description",
+        StoreId: storeId
+      })
+      .then((response) => {
+        const { body, status } = response
  
-  //       expect(status).toBe(400)
-  //       expect(body).toHaveProperty("message", "Image is required")
-  //       done()
-  //     })
-  //     .catch((err) => {
-  //       done(err)
-  //     })
-  // })
+        expect(status).toBe(400)
+        expect(body).toHaveProperty("message", "Image is required")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
   
   test("401 create Food with invalid token", (done) => {
     request(app)
       .post("/foods")
       .set("access_token", invalidToken)
       .send(dataFood)
+      .attach("imageUrl", "")
       .then((response) => {
         const { body, status } = response
 
@@ -221,6 +231,7 @@ describe("POST /foods", () => {
     request(app)
       .post("/foods")
       .send(dataFood)
+      .attach("imageUrl", "")
       .then((response) => {
         const { body, status } = response
 
@@ -237,6 +248,8 @@ describe("POST /foods", () => {
     request(app)
       .post("/foods")
       .set("access_token", validCustomerToken)
+      .send(dataFood)
+      .attach("imageUrl", "")
       .then((response) => {
         const { body, status } = response
 
@@ -253,7 +266,12 @@ describe("POST /foods", () => {
     request(app)
       .post("/foods")
       .set("access_token", validSellerToken2)
-      .send(dataFood)
+      .send({
+        name: "Food",
+        price: 15000,
+        description: "Food description"
+      })
+      .attach("imageUrl", "")
       .then((response) => {
         const { body, status } = response
  
@@ -346,6 +364,117 @@ describe("PUT /foods/:id", () => {
 
         expect(status).toBe(200)
         expect(body).toHaveProperty("message", "Success updating food information")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("200 update Food without image", (done) => {
+    request(app)
+      .put(`/foods/${foodId}`)
+      .set("access_token", validSellerToken1)
+      .send({
+        name: "Food",
+        price: 15000,
+        description: "Food description"
+      })
+      .then((response) => {
+        const { body, status } = response
+ 
+        expect(status).toBe(200)
+        expect(body).toHaveProperty("message", "Success updating food information")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("400 update Food without Image", (done) => {
+    request(app)
+      .put(`/foods/${foodId}`)
+      .set("access_token", validSellerToken1)
+      .send({
+        name: "Name",
+        price: 15000,
+        description: "Food description",
+      })
+      .then((response) => {
+        const { body, status } = response
+ 
+        expect(status).toBe(400)
+        expect(body).toHaveProperty("message", "Image is required")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  test("400 update Food without name", (done) => {
+    request(app)
+      .put(`/foods/${foodId}`)
+      .set("access_token", validSellerToken1)
+      .send({
+        name: "",
+        price: 15000,
+        description: "Food description",
+        imageUrl: "Image"
+      })
+      .attach("imageUrl", "")
+      .then((response) => {
+        const { body, status } = response
+ 
+        expect(status).toBe(400)
+        expect(body).toHaveProperty("message", "Name is required")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+  
+  test("400 update Food without description", (done) => {
+    request(app)
+      .put(`/foods/${foodId}`)
+      .set("access_token", validSellerToken1)
+      .send({
+        name: "Food",
+        price: 15000,
+        description: "",
+        imageUrl: "Image"
+      })
+      .attach("imageUrl", "")
+      .then((response) => {
+        const { body, status } = response
+ 
+        expect(status).toBe(400)
+        expect(body).toHaveProperty("message", "Description is required")
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+  
+  test("400 update Food without price", (done) => {
+    request(app)
+      .put(`/foods/${foodId}`)
+      .set("access_token", validSellerToken1)
+      .send({
+        name: "Food",
+        price : "",
+        description: "Food description",
+        imageUrl: "Image"
+      })
+      .attach("imageUrl", "")
+      .then((response) => {
+        const { body, status } = response
+ 
+        expect(status).toBe(400)
+        expect(body).toHaveProperty("message", "Price is required")
         done()
       })
       .catch((err) => {

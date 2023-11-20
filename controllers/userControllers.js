@@ -1,4 +1,3 @@
-const { fn } = require("sequelize");
 const { comparePassword } = require("../helpers/bcrypt");
 const imageKit = require("../helpers/imageKit");
 const { signToken } = require("../helpers/jwt");
@@ -84,16 +83,7 @@ class userControllers {
       const { username } = req.body;
       const id = req.user.id;
 
-      if (!username) {
-        throw { status: 400, message: "Username is required" };
-      }
-
-      const user = await User.findByPk(id);
-      if (!user) {
-        throw { status: 404, message: "User Not Found" };
-      }
-
-      await user.update({ username });
+      await User.update({ username }, { where: { id } });
 
       res.status(200).json({ message: "Success Edit Username" });
     } catch (error) {
@@ -111,9 +101,6 @@ class userControllers {
       }
 
       const user = await User.findByPk(id);
-      if (!user) {
-        throw { status: 404, message: "User Not Found" };
-      }
 
       if (!comparePassword(oldPassword, user.password)) {
         throw { status: 401, message: "Invalid password" };
@@ -127,7 +114,7 @@ class userControllers {
         throw { status: 401, message: "Cannot use the old password" };
       }
 
-      await user.update({ password: newPassword });
+      await User.update({ password: newPassword }, { where: { id } });
 
       res.status(200).json({ message: "Success Edit Password" });
     } catch (error) {
@@ -140,16 +127,7 @@ class userControllers {
       const { phoneNumber } = req.body;
       const id = req.user.id;
 
-      if (!phoneNumber) {
-        throw { status: 400, message: "Phone Number is required" };
-      }
-
-      const user = await User.findByPk(id);
-      if (!user) {
-        throw { status: 404, message: "User Not Found" };
-      }
-
-      await user.update({ phoneNumber });
+      await User.update({ phoneNumber }, { where: { id } });
 
       res.status(200).json({ message: "Success Edit Phone Number" });
     } catch (error) {
@@ -162,16 +140,7 @@ class userControllers {
       const { address } = req.body;
       const id = req.user.id;
 
-      if (!address) {
-        throw { status: 400, message: "Address is required" };
-      }
-
-      const user = await User.findByPk(id);
-      if (!user) {
-        throw { status: 404, message: "User Not Found" };
-      }
-
-      await user.update({ address });
+      await User.update({ address }, { where: { id } });
 
       res.status(200).json({ message: "Success Edit Address" });
     } catch (error) {
@@ -199,11 +168,8 @@ class userControllers {
             });
           }
           const id = req.user.id;
-          const user = await User.findByPk(id);
-          if (!user) {
-            throw { status: 404, message: "User Not Found" };
-          }
-          await user.update({ profilePicture: fileResponse.url });
+   
+          await User.update({ profilePicture: fileResponse.url }, { where: { id } });
 
           res.status(200).json({ message: "Success Edit Profile Picture" });
         }
@@ -222,18 +188,13 @@ class userControllers {
         throw { status: 400, message: "Location is required" };
       }
 
-      const user = await User.findByPk(id);
-      if (!user) {
-        throw { status: 404, message: "User Not Found" };
-      }
-
       const location = await Sequelize.fn(
         "ST_GeomFromText",
         `POINT(${longitude} ${latitude})`
       );
 
       console.log(location);
-      await user.update({ location });
+      await User.update({ location }, { where: { id } });
 
       res.status(200).json({ message: "Success Edit Location" });
     } catch (error) {
