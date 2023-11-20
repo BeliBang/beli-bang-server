@@ -5,7 +5,10 @@ class orderControllers {
     try {
       const orders = await Order.findAll({
         where: { UserId: req.user.id },
-      });
+      })
+      console.log("====================")
+      console.log(orders)
+      console.log("====================")
       if (orders.length == 0) {
         throw { status: 404, message: "No order has been made" };
       }
