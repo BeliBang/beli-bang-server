@@ -39,7 +39,10 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
     },
-    status: DataTypes.STRING
+    status: {
+      type: DataTypes.STRING,
+      defaultValue: "Waiting"
+    }
   }, {
     sequelize,
     modelName: 'Order',

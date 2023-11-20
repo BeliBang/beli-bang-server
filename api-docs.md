@@ -26,7 +26,8 @@ List of available endpoints:
 - `PUT /foods/:id`
 - `DELETE /foods/:id`
 
-- `GET /orders`
+- `GET /orders/customer`
+- `GET /orders/seller`
 - `POST /orders`
 - `GET /orders/:id`
 - `PUT /orders/:id`
@@ -1177,6 +1178,17 @@ Description:
 }
 ```
 
+- file:
+
+```json
+{
+  "fieldname": "imageUrl",
+  "originalname": "image.png",
+  "mimetype": "image/png",
+  "buffer": "buffer"
+}
+```
+
 - params:
 
 ```json
@@ -1190,7 +1202,6 @@ Description:
 ```json
 {
   "name": "string",
-  "imageUrl": "string",
   "price": "inter",
   "description": "string"
 }
@@ -1299,6 +1310,367 @@ _Response (403 - Forbidden)_
 ```json
 {
   "message": "Not the Owner"
+}
+```
+
+&nbsp;
+
+## GET /orders/customer
+
+Description:
+
+> Get orders from database By customer
+
+#### Request:
+
+- headers
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+[
+  {
+    "id": 2,
+    "StoreId": 1,
+    "UserId": 3,
+    "status": "Completed",
+    "User": {
+      "id": 3,
+      "username": "customer",
+      "email": "customer@mail.com",
+      "role": "Customer",
+      "phoneNumber": "0866666",
+      "address": "jl.indonesia",
+      "profilePicture": "https://www.mmm.ucar.edu/sites/default/files/img/default-avatar.jpg",
+      "location": {
+        "type": "Point",
+        "coordinates": [107.59278847659893, -6.942981263106864]
+      }
+    },
+    "Store": {
+      "id": 1,
+      "name": "HISANA disuka",
+      "status": true,
+      "imageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEikdLvYYrJls_oY_h6OyzmWQLijl9qdiMFiKUmEKBWr7O7R4wmo4cwQOG5cIMQzRDT-q9rkENIWYaKIw3GoJ8JFkocS-9a98pA_u9p18521Q6rlNv_7NDs3n2dccSR8QlmPXhQk6mUONSQCTp6SHt0AH7uUBpYiaKkIVUwdB6a216GIM2gRcfWcurpEhA/w1200-h630-p-k-no-nu/Beli%201set%20Peralatan%20Hisana%20Fried%20Chicken%20Modal%20Rp.%203,7%20Juta.jpg",
+      "description": "Selamat datang di HISANA disuka destinasi terbaik untuk pencinta ayam goreng yang menginginkan cita rasa istimewa! Toko kami menawarkan pengalaman kuliner yang tak terlupakan dengan menu utama kami yang lezat dan beragam pilihan.",
+      "UserId": 1,
+      "User": {
+        "id": 1,
+        "username": "seller1",
+        "email": "seller1@mail.com",
+        "role": "Seller",
+        "phoneNumber": "0899999",
+        "address": "jl.indonesia",
+        "profilePicture": "https://www.mmm.ucar.edu/sites/default/files/img/default-avatar.jpg",
+        "location": {
+          "type": "Point",
+          "coordinates": [107.59278847659893, -6.942981263106864]
+        }
+      }
+    }
+  },
+  ...
+]
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "No order has been made"
+}
+```
+
+&nbsp;
+
+## GET /orders/seller
+
+Description:
+
+> Get orders from database By seller
+
+#### Request:
+
+- headers
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+{
+  "locationSeller": {
+    "type": "Point",
+    "coordinates": [107.59278847659893, -6.942981263106864]
+  },
+  "orders": [
+    {
+      "id": 2,
+      "StoreId": 1,
+      "UserId": 3,
+      "status": "Completed",
+      "User": {
+        "id": 3,
+        "username": "customer",
+        "email": "customer@mail.com",
+        "role": "Customer",
+        "phoneNumber": "0866666",
+        "address": "jl.indonesia",
+        "profilePicture": "https://www.mmm.ucar.edu/sites/default/files/img/default-avatar.jpg",
+        "location": {
+          "type": "Point",
+          "coordinates": [107.59278847659893, -6.942981263106864]
+        }
+      }
+    },
+    ...
+  ]
+}
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "No order has been made"
+}
+```
+
+&nbsp;
+
+## POST /orders
+
+Description:
+
+> Add new order to seller from customer
+
+#### Request:
+
+- headers
+
+```json
+{
+  "Content-Type": "application/JSON",
+  "access_token": "string"
+}
+```
+
+- body:
+
+```json
+{
+  "StoreId": "string",
+  "status": "integer"
+}
+```
+
+_Response (201 - Created)_
+
+```json
+{
+  "message": "Success creating order"
+}
+```
+
+_Response (400 - Bad Request)_
+
+```json
+{
+  "message": "Store ID is require"
+}
+```
+
+OR
+
+```json
+{
+  "message": "User ID is required"
+}
+```
+
+&nbsp;
+
+## GET /orders/:id
+
+Description:
+
+> Get order from database By Id
+
+#### Request:
+
+- headers
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+{
+  "store": {
+    "id": 1,
+    "name": "HISANA disuka",
+    "status": true,
+    "imageUrl": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEikdLvYYrJls_oY_h6OyzmWQLijl9qdiMFiKUmEKBWr7O7R4wmo4cwQOG5cIMQzRDT-q9rkENIWYaKIw3GoJ8JFkocS-9a98pA_u9p18521Q6rlNv_7NDs3n2dccSR8QlmPXhQk6mUONSQCTp6SHt0AH7uUBpYiaKkIVUwdB6a216GIM2gRcfWcurpEhA/w1200-h630-p-k-no-nu/Beli%201set%20Peralatan%20Hisana%20Fried%20Chicken%20Modal%20Rp.%203,7%20Juta.jpg",
+    "description": "Selamat datang di HISANA disuka destinasi terbaik untuk pencinta ayam goreng yang menginginkan cita rasa istimewa! Toko kami menawarkan pengalaman kuliner yang tak terlupakan dengan menu utama kami yang lezat dan beragam pilihan.",
+    "UserId": 1,
+    "User": {
+      "id": 1,
+      "username": "seller1",
+      "email": "seller1@mail.com",
+      "role": "Seller",
+      "phoneNumber": "0899999",
+      "address": "jl.indonesia",
+      "profilePicture": "https://www.mmm.ucar.edu/sites/default/files/img/default-avatar.jpg",
+      "location": {
+        "type": "Point",
+        "coordinates": [107.59278847659893, -6.942981263106864]
+      }
+    }
+  },
+  "customer": {
+    "id": 3,
+    "username": "customer",
+    "email": "customer@mail.com",
+    "role": "Customer",
+    "phoneNumber": "0866666",
+    "address": "jl.indonesia",
+    "profilePicture": "https://www.mmm.ucar.edu/sites/default/files/img/default-avatar.jpg",
+    "location": {
+      "type": "Point",
+      "coordinates": [107.59278847659893, -6.942981263106864]
+    }
+  }
+}
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "Order Not Found"
+}
+```
+
+_Response (401 - Unauthorized)_
+
+```json
+{
+  "message": "Invalid store/customer"
+}
+```
+
+&nbsp;
+
+## PUT /orders/:id
+
+Description:
+
+> Edit food from database By id
+
+#### Request:
+
+- headers
+
+```json
+{
+  "Content-Type": "application/JSON",
+  "access_token": "string"
+}
+```
+
+- params:
+
+```json
+{
+  "id": "integer"
+}
+```
+
+- body:
+
+```json
+{
+  "status": "string"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+{
+  "message": "Success updating order status"
+}
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "Order Not Found"
+}
+```
+
+_Response (403 - Forbidden)_
+
+```json
+{
+  "message": "Forbidden for the seller"
+}
+```
+
+&nbsp;
+
+## DELETE /orders/:id"
+
+Description:
+
+> Delete food from database By id
+
+#### Request:
+
+- headers
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+- params:
+
+```json
+{
+  "id": "integer"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+{
+  "message": "Order has been deleted"
+}
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "Order Not Found"
 }
 ```
 

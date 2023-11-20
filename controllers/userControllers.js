@@ -3,6 +3,8 @@ const { comparePassword } = require("../helpers/bcrypt");
 const imageKit = require("../helpers/imageKit");
 const { signToken } = require("../helpers/jwt");
 const { User, Sequelize } = require("../models");
+const axios = require("axios");
+const redis = require("../helpers/redis");
 
 class userControllers {
   static async register(req, res, next) {
@@ -27,7 +29,7 @@ class userControllers {
 
   static async login(req, res, next) {
     try {
-      const { email, password } = req.body;
+      const { email, password, tokenNotification } = req.body;
       if (!email) {
         throw { status: 400, message: "Email is required" };
       }
@@ -35,7 +37,6 @@ class userControllers {
         throw { status: 400, message: "Password is required" };
       }
 
-      console.log(password);
       const user = await User.findOne({
         where: { email },
       });
@@ -44,6 +45,17 @@ class userControllers {
       }
 
       const access_token = signToken({ id: user.id, email: user.email });
+
+      //set redis
+      // const tokenCache = await redis.get(`tokens:notification:${user.id}`);
+
+      // if (!tokenCache) {
+      //   await redis.set(
+      //     `tokens:notification:${user.id}`,
+      //     JSON.stringify(tokenNotification)
+      //   );
+      // }
+
       res
         .status(200)
         .json({ access_token, username: user.username, role: user.role, id: user.id });
