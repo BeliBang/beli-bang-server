@@ -50,6 +50,8 @@ class orderControllers {
         ],
       });
 
+      // console.log(store.User);
+
       if (!store) {
         throw { status: 404, message: "Store not found" };
       }

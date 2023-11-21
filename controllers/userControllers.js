@@ -100,21 +100,26 @@ class userControllers {
         throw { status: 400, message: "Password is required" };
       }
 
-      const user = await User.findByPk(id);
+      if (!newPassword) {
+        throw { status: 400, message: "Password is required" };
+      }
 
-      if (!comparePassword(oldPassword, user.password)) {
-        throw { status: 401, message: "Invalid password" };
+      if (oldPassword == newPassword) {
+        throw { status: 401, message: "Cannot use the old password" };
       }
 
       if (newPassword !== confirmPassword) {
         throw { status: 400, message: "Password does not match" };
       }
 
-      if (oldPassword == newPassword) {
-        throw { status: 401, message: "Cannot use the old password" };
+      const user = await User.findByPk(id);
+
+      if (!comparePassword(oldPassword, user.password)) {
+        throw { status: 401, message: "Invalid password" };
       }
-      const hashing = hashPassword(newPassword)
-      await User.update({ password: hashing }, { where: { id } });
+      
+      // const hashing = hashPassword(newPassword)
+      await User.update({ password: newPassword }, { where: { id } });
 
       res.status(200).json({ message: "Success Edit Password" });
     } catch (error) {
