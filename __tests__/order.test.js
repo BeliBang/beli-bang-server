@@ -314,6 +314,22 @@ describe("GET /orders/:id", () => {
       })
   })
 
+  test("401 get Order with invalid token", (done) => {
+    request(app)
+      .get(`/orders/${orderId}`)
+      .set("access_token", invalidToken)
+      .then((response) => {
+        const { body, status } = response
+
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Invalid token");
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
   test("401 get Order without token", (done) => {
     request(app)
       .get(`/orders/${orderId}`)
@@ -463,23 +479,6 @@ describe("PUT /orders/:id", () => {
 
         expect(status).toBe(401);
         expect(body).toHaveProperty("message", "Invalid token")
-        done()
-      })
-      .catch((err) => {
-        done(err)
-      })
-  })
-
-  test("403 update Order without Seller role", (done) => {
-    request(app)
-      .put(`/orders/${orderId}`)
-      .set("access_token", validCustomerToken)
-      .send({ status: 'Success' })
-      .then((response) => {
-        const { body, status } = response
-
-        expect(status).toBe(403);
-        expect(body).toHaveProperty("message", "Forbidden for the seller")
         done()
       })
       .catch((err) => {

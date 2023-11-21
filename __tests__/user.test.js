@@ -36,7 +36,7 @@ describe("When imagekit throws error", () => {
           console.log("upload");
           return new Promise(resolve => {
             resolve({ 
-              url: "puraa-pura.jpg"
+              url: "test.jpg"
             })
           })
         }
@@ -862,7 +862,7 @@ describe("When imagekit throws error", () => {
       request(app)
         .patch("/users/profilepicture")
         .set("access_token", validSellerToken)
-        // .attach("profilePicture", "")
+        .attach("profilePicture", "")
         .then((response) => {
           const { body, status } = response
 
@@ -879,8 +879,6 @@ describe("When imagekit throws error", () => {
       request(app)
         .patch("/users/profilepicture")
         .set("access_token", invalidToken)
-        .attach("profilePicture", "")
-        .attach()
         .then((response) => {
           const { body, status } = response
 
@@ -896,7 +894,6 @@ describe("When imagekit throws error", () => {
     test("401 update User profile picture without token", (done) => {
       request(app)
         .patch("/users/profilepicture")
-        .attach("profilePicture", "")
         .then((response) => {
           const { body, status } = response
 
