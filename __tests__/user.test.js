@@ -36,7 +36,7 @@ describe("When imagekit throws error", () => {
           console.log("upload");
           return new Promise(resolve => {
             resolve({ 
-              url: "https://ik.imagekit.io/1h2qj6l0s/test.jpg?updatedAt=1700553337152"
+              url: "puraa-pura.jpg"
             })
           })
         }
@@ -861,13 +861,13 @@ describe("When imagekit throws error", () => {
     test("400 update User without profile picture", (done) => {
       request(app)
         .patch("/users/profilepicture")
-        .set("access_token", validCustomerToken)
-        .attach("profilePicture", "")
+        .set("access_token", validSellerToken)
+        // .attach("profilePicture", "")
         .then((response) => {
           const { body, status } = response
 
           expect(status).toBe(400);
-          expect(body).toHaveProperty("message", "Profile Picture is required")
+          expect(body).toHaveProperty("message", "Image must be provided")
           done()
         })
         .catch((err) => {
@@ -909,7 +909,7 @@ describe("When imagekit throws error", () => {
         })
     })
 
-    test.only("200 success update User profile picture", (done) => {
+    test("200 success update User profile picture", (done) => {
       request(app)
         .patch("/users/profilepicture")
         .set("access_token", validSellerToken)

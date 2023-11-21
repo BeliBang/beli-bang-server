@@ -1,5 +1,5 @@
 const { comparePassword, hashPassword } = require("../helpers/bcrypt");
-const imageKit = require("../helpers/imageKit");
+const imageKit = require("../middlewares/imageKit");
 const { signToken } = require("../helpers/jwt");
 const { User, Sequelize } = require("../models");
 // const axios = require("axios");
@@ -117,7 +117,7 @@ class userControllers {
       if (!comparePassword(oldPassword, user.password)) {
         throw { status: 401, message: "Invalid password" };
       }
-      
+
       // const hashing = hashPassword(newPassword)
       await User.update({ password: newPassword }, { where: { id } });
 
@@ -154,41 +154,40 @@ class userControllers {
   }
 
   static async editProfilePicture(req, res, next) {
-    const id = req.user.id;
     try {
-      console.log(req.file);
+      const id = req.user.id;
+      const { imgUrl: profilePicture } = req.body;
       console.log("======================================");
-      if (!req.file) {
-        throw { status: 400, message: "Profile Picture is required" };
-      }
+      console.log({profilePicture});
+      // if (!req.file) {
+      //   throw { status: 400, message: "Profile Picture is required" };
+      // }
 
-      console.log(imageKit.upload);
-      const result = await imageKit.upload(
-        {
-          file: req.file.buffer.toString("base64"),
-          fileName: `${Date.now()}_${req.file.originalname}`,
-          folder: "BB_User",
-          useUniqueFileName: false,
-        }
-        // async function (err, fileResponse) {
-        //   if (err) {
-        //     return res.status(500).json({
-        //       message: "Error occured during photo upload. Please try again.",
-        //     });
-        //   }
-        //   const id = req.user.id;
-   
-        //   await User.update({ profilePicture: fileResponse.url }, { where: { id } });
+      // const result = await imageKit.upload(
+      //   {
+      //     file: req.file.buffer.toString("base64"),
+      //     fileName: `${Date.now()}_${req.file.originalname}`,
+      //     folder: "BB_User",
+      //     useUniqueFileName: false,
+      //   }
+      //   // async function (err, fileResponse) {
+      //   //   if (err) {
+      //   //     return res.status(500).json({
+      //   //       message: "Error occured during photo upload. Please try again.",
+      //   //     });
+      //   //   }
+      //   //   const id = req.user.id;
 
-        //   res.status(200).json({ message: "Success Edit Profile Picture" });
-        // } 
-      );
-      console.log(result);
-      await User.update({ profilePicture: result.url }, { where: { id } });
+      //   //   await User.update({ profilePicture: fileResponse.url }, { where: { id } });
+
+      //   //   res.status(200).json({ message: "Success Edit Profile Picture" });
+      //   // }
+      // );
+      // const image = req.file.console.log(result);
+      await User.update({ profilePicture }, { where: { id } });
 
       res.status(200).json({ message: "Success Edit Profile Picture" });
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }

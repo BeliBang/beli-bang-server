@@ -1,5 +1,5 @@
 const { Food, RatingFood, Store } = require("../models");
-const imageKit = require("../helpers/imageKit");
+const imageKit = require("../middlewares/imageKit");
 
 class foodControllers {
   static async findFood(req, res, next) {
