@@ -154,32 +154,41 @@ class userControllers {
   }
 
   static async editProfilePicture(req, res, next) {
+    const id = req.user.id;
     try {
+      console.log(req.file);
+      console.log("======================================");
       if (!req.file) {
         throw { status: 400, message: "Profile Picture is required" };
       }
 
-      await imageKit.upload(
+      console.log(imageKit.upload);
+      const result = await imageKit.upload(
         {
           file: req.file.buffer.toString("base64"),
           fileName: `${Date.now()}_${req.file.originalname}`,
           folder: "BB_User",
           useUniqueFileName: false,
-        },
-        async function (err, fileResponse) {
-          if (err) {
-            return res.status(500).json({
-              message: "Error occured during photo upload. Please try again.",
-            });
-          }
-          const id = req.user.id;
-   
-          await User.update({ profilePicture: fileResponse.url }, { where: { id } });
-
-          res.status(200).json({ message: "Success Edit Profile Picture" });
         }
+        // async function (err, fileResponse) {
+        //   if (err) {
+        //     return res.status(500).json({
+        //       message: "Error occured during photo upload. Please try again.",
+        //     });
+        //   }
+        //   const id = req.user.id;
+   
+        //   await User.update({ profilePicture: fileResponse.url }, { where: { id } });
+
+        //   res.status(200).json({ message: "Success Edit Profile Picture" });
+        // } 
       );
+      console.log(result);
+      await User.update({ profilePicture: result.url }, { where: { id } });
+
+      res.status(200).json({ message: "Success Edit Profile Picture" });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
