@@ -1,10 +1,8 @@
 const { User, Store, Food } = require("../models");
-const imageKit = require("../middlewares/imageKit");
 
 class storeControllers {
   static async showStores(req, res, next) {
     try {
-      // Filter by Location, order ASC
       const stores = await Store.findAll({
         attributes: { exclude: ["createdAt", "updatedAt"] },
         where: { status: true },
@@ -15,12 +13,6 @@ class storeControllers {
           },
         ],
       });
-      if (stores.length == 0) {
-        throw {
-          status: 404,
-          message: "Sorry, there is no available store near your area",
-        };
-      }
       res.status(200).json(stores);
     } catch (error) {
       next(error);
@@ -80,45 +72,20 @@ class storeControllers {
 
   static async createStore(req, res, next) {
     try {
-      const { name, description } = req.body;
-
+      const { name, description, imgUrl: imageUrl } = req.body;
+      
       const store = await Store.findOne({ where: { UserId: req.user.id } });
       if (store) {
         throw { status: 401, message: "You already have a store" };
       }
-      if (!req.file) {
-        throw { status: 400, message: "Image store is required" };
-      }
-      if (!name) {
-        throw { status: 400, message: "Name is required" };
-      }
-      if (!description) {
-        throw { status: 400, message: "Description is required" };
-      }
 
-      await imageKit.upload(
-        {
-          file: req.file.buffer.toString("base64"),
-          fileName: `${Date.now()}_${req.file.originalname}`,
-          folder: "BB_Store",
-          useUniqueFileName: false,
-        },
-        async function (err, fileResponse) {
-          if (err) {
-            return res.status(500).json({
-              message: "Error occured during photo upload. Please try again.",
-            });
-          }
-
-          await Store.create({
-            name,
-            imageUrl: fileResponse.url,
-            description,
-            UserId: req.user.id,
-          });
-          res.status(201).json({ message: "Success creating store" });
-        }
-      );
+      await Store.create({
+        name,
+        imageUrl,
+        description,
+        UserId: req.user.id,
+      })
+      res.status(201).json({ message: "Success creating store" }); 
     } catch (error) {
       next(error);
     }
@@ -126,52 +93,12 @@ class storeControllers {
 
   static async updateStore(req, res, next) {
     try {
-      const { name, description, status } = req.body;
+      const { name, description, status, imgUrl: imageUrl } = req.body;
       const { id } = req.params;
 
-      if (!req.file) {
-        const store = await Store.findByPk(id);
-        if (!store) {
-          throw { status: 404, message: "Store Not Found" };
-        }
-
-        await store.update({ name, description, status });
-        res.status(200).json({ message: "Success updating store information" });
-      } else {
-        const store = await Store.findByPk(id);
-        if (!store) {
-          throw { status: 404, message: "Store Not Found" };
-        }
-        if (!name) {
-          throw { status: 400, message: "Name is required" };
-        }
-        if (!description) {
-          throw { status: 400, message: "Description is required" };
-        }
-
-        await imageKit.upload(
-          {
-            file: req.file.buffer.toString("base64"),
-            fileName: `${Date.now()}_${req.file.originalname}`,
-            folder: "BB_Store",
-            useUniqueFileName: false,
-          },
-          async function (err, fileResponse) {
-            if (err) {
-              return res.status(500).json({
-                message: "Error occured during photo upload. Please try again.",
-              });
-            }
-
-            await store.update({
-              name,
-              imageUrl: fileResponse.url,
-              description,
-            });
-            res.status(200).json({ message: "Success updating store information" });
-          }
-        );
-      }
+      await Store.update({ name, description, status, imageUrl }, { where: { id } });
+      
+      res.status(200).json({ message: "Success updating store information" });
     } catch (error) {
       next(error);
     }

@@ -2,7 +2,7 @@
 const { Store, User, Food, Order } = require("../models");
 // const axios = require("axios");
 
-class orderControllers {
+class orderControllers {                                                // 105
   static async showOrderCustomers(req, res, next) {
     try {
       const orders = await Order.findAll({
@@ -100,10 +100,6 @@ class orderControllers {
         attributes: { exclude: ["createdAt", "updatedAt", "password"] },
         where: { id: order.UserId },
       });
-
-      if (!store || !customer) {
-        throw { status: 401, message: "Invalid store/customer" };  //98
-      }
 
       res.status(200).json({ store, customer });
     } catch (error) {

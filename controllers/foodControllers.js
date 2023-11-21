@@ -1,5 +1,4 @@
 const { Food, RatingFood, Store } = require("../models");
-const imageKit = require("../middlewares/imageKit");
 
 class foodControllers {
   static async findFood(req, res, next) {
@@ -21,56 +20,22 @@ class foodControllers {
 
   static async createFood(req, res, next) {
     try {
-      const { name, price, description } = req.body;
+      const { name, price, description, imgUrl: imageUrl } = req.body;
 
-      const store = await Store.findOne({
-        where: { UserId: req.user.id },
-      });
+      const store = await Store.findOne({ where: { UserId: req.user.id } });
 
       if (!store) {
         throw { status: 404, message: "Please register your store first" };
       }
 
-      
-      if (!name) {
-        throw { status: 400, message: "Name is required" };
-      }
-      if (!price) {
-        throw { status: 400, message: "Price is required" };
-      }
-      if (!description) {
-        throw { status: 400, message: "Description is required" };
-      }
-      if (!req.file) {
-        throw { status: 400, message: "Image is required" };
-      }
-
-      const StoreId = store.id;
-
-      await imageKit.upload(
-        {
-          file: req.file.buffer.toString("base64"),
-          fileName: `${Date.now()}_${req.file.originalname}`,
-          folder: "BB_Food",
-          useUniqueFileName: false,
-        },
-        async function (err, fileResponse) {
-          if (err) {
-            return res.status(500).json({
-              message: "Error occured during photo upload. Please try again.",
-            });
-          }
-
-          await Food.create({
-            name,
-            imageUrl: fileResponse.url,
-            price,
-            description,
-            StoreId,
-          });
-          res.status(201).json({ message: "Successfully added food" });
-        }
-      );
+      await Food.create({
+        name,
+        imageUrl,
+        price,
+        description,
+        StoreId: store.id,
+      });
+      res.status(201).json({ message: "Successfully added food" })
     } catch (error) {
       next(error);
     }
@@ -78,52 +43,18 @@ class foodControllers {
 
   static async updateFood(req, res, next) {
     try {
-      const { name, price, description } = req.body;
+      const { name, price, description, imgUrl: imageUrl } = req.body;
       const { id } = req.params;
 
       const food = await Food.findByPk(id);
-
-      if (!req.file) {
-        await food.update({ name, price, description });
-        res.status(200).json({ message: "Success updating food information" });
-      } else {
-        if (!req.file.buffer) {
-          throw { status: 400, message: "Image is required" }
-        }
-        if (name == "") {
-          throw { status: 400, message: "Name is required" };
-        }
-        if (price == "") {
-          throw { status: 400, message: "Price is required" };
-        }
-        if (description == "") {
-          throw { status: 400, message: "Description is required" };
-        }
-
-        await imageKit.upload(
-          {
-            file: req.file.buffer.toString("base64"),
-            fileName: `${Date.now()}_${req.file.originalname}`,
-            folder: "BB_Food",
-            useUniqueFileName: false,
-          },
-          async function (err, fileResponse) {
-            if (err) {
-              return res.status(500).json({
-                message: "Error occured during photo upload. Please try again.",
-              });
-            }
-
-            await food.update({
-              name,
-              imageUrl: fileResponse.url,
-              price,
-              description,
-            });
-            res.status(200).json({ message: "Success updating food information" });
-          }
-        );
-      }
+      
+      await food.update({
+        name,
+        imageUrl,
+        price,
+        description,
+      });
+      res.status(200).json({ message: "Success updating food information" });
     } catch (error) {
       next(error);
     }
