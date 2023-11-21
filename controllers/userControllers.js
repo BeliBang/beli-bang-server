@@ -28,7 +28,7 @@ class userControllers {
 
   static async login(req, res, next) {
     try {
-      const { email, password } = req.body;
+      const { email, password, expoPushToken: tokenNotification } = req.body;
       if (!email) {
         throw { status: 400, message: "Email is required" };
       }

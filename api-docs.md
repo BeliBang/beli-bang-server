@@ -33,12 +33,13 @@ List of available endpoints:
 - `PUT /orders/:id`
 - `DELETE /orders/:id`
 
-- `GET /stores/rating/:storeId`
-- `POST /stores/rating/:storeId`
-- `DELETE /stores/rating/:id`
+- `GET /ratingstores/:storeId`
+- `POST /ratingstores/:storeId`
+- `PUT /ratingstores/:id`
+- `DELETE /ratingstores/:id`
 
-- `GET /foods/rating/:storeId`
-- `POST /foods/rating/:storeId`
+- `GET /foods/rating/:foodId`
+- `POST /foods/rating/:foodId`
 - `DELETE /foods/rating/:id`
 
 - `GET /likes/:storeId`
