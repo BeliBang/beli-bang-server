@@ -13,8 +13,6 @@ module.exports = {
     const dataUsers = users.map((el) => {
       delete el.id;
       el.password = hashPassword(el.password);
-      // el.profilePicture =
-      //   "https://www.mmm.ucar.edu/sites/default/files/img/default-avatar.jpg";
       el.createdAt = el.updatedAt = new Date();
       return el;
     });

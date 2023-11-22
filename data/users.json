@@ -1,5 +1,6 @@
 [
   {
+    "id": 1,
     "username": "Reza",
     "email": "reza@mail.com",
     "password": "seller",
@@ -7,9 +8,10 @@
     "phoneNumber": "08123456789",
     "address": "Jl. Mangga",
     "profilePicture": "https://ik.imagekit.io/1h2qj6l0s/Foto/1513936660062.jpg?updatedAt=1700648251824",
-    "location": "POINT (106.962007 -6.226963)"
+    "location": "POINT(106.962007 -6.226963)"
   },
   {
+    "id": 2,
     "username": "Malik",
     "email": "malik@mail.com",
     "password": "seller",
@@ -17,9 +19,10 @@
     "phoneNumber": "08123456789",
     "address": "Jl. Alpukat",
     "profilePicture": "https://ik.imagekit.io/1h2qj6l0s/Foto/1513936660062.jpg?updatedAt=1700648251824",
-    "location": "POINT (106.961714 -6.227430)"
+    "location": "POINT(106.961714 -6.227430)"
   },
   {
+    "id": 3,
     "username": "Ahmad",
     "email": "ahmad@mail.com",
     "password": "seller",
@@ -27,9 +30,10 @@
     "phoneNumber": "08123456789",
     "address": "Jl. Anggur",
     "profilePicture": "https://ik.imagekit.io/1h2qj6l0s/Foto/syon.png?updatedAt=1700648183993",
-    "location": "POINT (106.961103 -6.227218)"
+    "location": "POINT(106.961103 -6.227218)"
   },
   {
+    "id": 4,
     "username": "Agung",
     "email": "agung@mail.com",
     "password": "seller",
@@ -37,9 +41,10 @@
     "phoneNumber": "08123456789",
     "address": "Jl. Pisang",
     "profilePicture": "https://ik.imagekit.io/1h2qj6l0s/Foto/syon.png?updatedAt=1700648183993",
-    "location": "POINT (106.960020 -6.226938)"
+    "location": "POINT(106.960020 -6.226938)"
   },
   {
+    "id": 5,
     "username": "Setiawan",
     "email": "setiawan@mail.com",
     "password": "seller",
@@ -47,9 +52,10 @@
     "phoneNumber": "08123456789",
     "address": "Jl. Pisang",
     "profilePicture": "https://ik.imagekit.io/1h2qj6l0s/Foto/syon.png?updatedAt=1700648183993",
-    "location": "POINT (106.960000 -6.227792)"
+    "location": "POINT(106.960000 -6.227792)"
   },
   {
+    "id": 6,
     "username": "Rio",
     "email": "rio@mail.com",
     "password": "customer",
@@ -57,9 +63,10 @@
     "phoneNumber": "08123456789",
     "address": "Jl. Jeruk",
     "profilePicture": "https://ik.imagekit.io/1h2qj6l0s/Foto/rio.png?updatedAt=1700648202832",
-    "location": "POINT (106.961985 -6.226165)"
+    "location": "POINT(106.961985 -6.226165)"
   },
   {
+    "id": 7,
     "username": "Wijaya",
     "email": "wijaya@mail.com",
     "password": "customer",
@@ -67,9 +74,10 @@
     "phoneNumber": "08123456789",
     "address": "Jl. Semangka",
     "profilePicture": "https://ik.imagekit.io/1h2qj6l0s/Foto/rio.png?updatedAt=1700648202832",
-    "location": "POINT (106.961460 -6.225871)"
+    "location": "POINT(106.961460 -6.225871)"
   },
   {
+    "id": 8,
     "username": "Dicky",
     "email": "dicky@mail.com",
     "password": "customer",
@@ -77,9 +85,10 @@
     "phoneNumber": "08123456789",
     "address": "Jl. Salak",
     "profilePicture": "https://ik.imagekit.io/1h2qj6l0s/Foto/tama.png?updatedAt=1700648196022",
-    "location": "{POINT (106.961355 -6.228188)"
+    "location": "POINT(106.961355 -6.228188)"
   },
   {
+    "id": 9,
     "username": "Aditya",
     "email": "aditya@mail.com",
     "password": "customer",
@@ -87,9 +96,10 @@
     "phoneNumber": "08123456789",
     "address": "Jl. Melon",
     "profilePicture": "https://ik.imagekit.io/1h2qj6l0s/Foto/tama.png?updatedAt=1700648196022",
-    "location": "POINT (106.962007 -6.228076)"
+    "location": "POINT(106.962007 -6.228076)"
   },
   {
+    "id": 10,
     "username": "Tama",
     "email": "tama@mail.com",
     "password": "customer",
@@ -97,6 +107,6 @@
     "phoneNumber": "08123456789",
     "address": "Jl. Durian",
     "profilePicture": "https://ik.imagekit.io/1h2qj6l0s/Foto/tama.png?updatedAt=1700648196022",
-    "location": "POINT (106.960662 -6.226561)"
+    "location": "POINT(106.960662 -6.226561)"
   }
 ]
