@@ -13,9 +13,9 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// app.get("/", (req, res) => {
-//   res.send("Test Server BeliBang");
-// });
+app.get("/", (req, res) => {
+  res.send("Test Server BeliBang");
+});
 
 app.use(router);
 app.use(errorHandling);
