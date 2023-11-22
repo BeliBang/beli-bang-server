@@ -2,8 +2,7 @@ const { comparePassword, hashPassword } = require("../helpers/bcrypt");
 const imageKit = require("../middlewares/imageKit");
 const { signToken } = require("../helpers/jwt");
 const { User, Sequelize } = require("../models");
-// const axios = require("axios");
-// const redis = require("../helpers/redis");
+const redis = require("../helpers/redis");
 
 class userControllers {
   static async register(req, res, next) {
@@ -46,14 +45,14 @@ class userControllers {
       const access_token = signToken({ id: user.id, email: user.email });
 
       //set redis
-      // const tokenCache = await redis.get(`tokens:notification:${user.id}`);
+      const tokenCache = await redis.get(`tokens:notification:${user.id}`);
 
-      // if (!tokenCache) {
-      //   await redis.set(
-      //     `tokens:notification:${user.id}`,
-      //     JSON.stringify(tokenNotification)
-      //   );
-      // }
+      if (!tokenCache) {
+        await redis.set(
+          `tokens:notification:${user.id}`,
+          JSON.stringify(tokenNotification)
+        );
+      }
 
       res
         .status(200)
@@ -118,7 +117,6 @@ class userControllers {
         throw { status: 401, message: "Invalid password" };
       }
 
-      // const hashing = hashPassword(newPassword)
       await User.update({ password: newPassword }, { where: { id } });
 
       res.status(200).json({ message: "Success Edit Password" });
@@ -157,33 +155,7 @@ class userControllers {
     try {
       const id = req.user.id;
       const { imgUrl: profilePicture } = req.body;
-      console.log("======================================");
-      console.log({profilePicture});
-      // if (!req.file) {
-      //   throw { status: 400, message: "Profile Picture is required" };
-      // }
 
-      // const result = await imageKit.upload(
-      //   {
-      //     file: req.file.buffer.toString("base64"),
-      //     fileName: `${Date.now()}_${req.file.originalname}`,
-      //     folder: "BB_User",
-      //     useUniqueFileName: false,
-      //   }
-      //   // async function (err, fileResponse) {
-      //   //   if (err) {
-      //   //     return res.status(500).json({
-      //   //       message: "Error occured during photo upload. Please try again.",
-      //   //     });
-      //   //   }
-      //   //   const id = req.user.id;
-
-      //   //   await User.update({ profilePicture: fileResponse.url }, { where: { id } });
-
-      //   //   res.status(200).json({ message: "Success Edit Profile Picture" });
-      //   // }
-      // );
-      // const image = req.file.console.log(result);
       await User.update({ profilePicture }, { where: { id } });
 
       res.status(200).json({ message: "Success Edit Profile Picture" });
@@ -206,7 +178,6 @@ class userControllers {
         `POINT(${longitude} ${latitude})`
       );
 
-      console.log(location);
       await User.update({ location }, { where: { id } });
 
       res.status(200).json({ message: "Success Edit Location" });

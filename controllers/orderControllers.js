@@ -1,8 +1,8 @@
-// const redis = require("../helpers/redis");
+const redis = require("../helpers/redis");
 const { Store, User, Food, Order } = require("../models");
-// const axios = require("axios");
+const axios = require("axios");
 
-class orderControllers {                                                // 105
+class orderControllers {
   static async showOrderCustomers(req, res, next) {
     try {
       const orders = await Order.findAll({
@@ -36,7 +36,8 @@ class orderControllers {                                                // 105
     }
   }
 
-  static async showOrderSellers(req, res, next) { //40-70
+  static async showOrderSellers(req, res, next) {
+    //40-70
     try {
       const id = req.user.id;
 
@@ -49,8 +50,6 @@ class orderControllers {                                                // 105
           },
         ],
       });
-
-      // console.log(store.User);
 
       if (!store) {
         throw { status: 404, message: "Store not found" };
@@ -113,35 +112,38 @@ class orderControllers {                                                // 105
 
       await Order.create({ StoreId, UserId: req.user.id, status });
 
+      // token-notification store
+      const store = await Store.findOne({
+        where: { id: StoreId },
+      });
+
+      const tokenCache = await redis.get(`tokens:notification:${store.UserId}`);
+
+      if (tokenCache) {
+        const expoPushToken = JSON.parse(tokenCache);
+
+        const user = await User.findByPk(req.user.id);
+
+        const message = {
+          to: expoPushToken,
+          sound: "default",
+          title: "Beli Bang!!",
+          body: `You have a new order from ${user.username}`,
+          data: { someData: "goes here" },
+        };
+
+        await axios("https://exp.host/--/api/v2/push/send", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Accept-encoding": "gzip, deflate",
+            "Content-Type": "application/json",
+          },
+          data: message,
+        });
+      }
+
       res.status(201).json({ message: "Success creating order" });
-
-      // const tokenCache = await redis.get(`tokens:notification:${req.user.id}`);
-
-      // const expoPushToken = JSON.parse(tokenCache);
-
-      // const notification = sendPushNotification(expoPushToken)
-
-      // async function sendPushNotification(expoPushToken) {
-      //   const message = {
-      //     to: expoPushToken,
-      //     sound: "default",
-      //     title: "Original Title",
-      //     body: "And here is the body!",
-      //     data: { someData: "goes here" },
-      //   };
-
-      //   await axios("https://exp.host/--/api/v2/push/send", {
-      //     method: "POST",
-      //     headers: {
-      //       Accept: "application/json",
-      //       "Accept-encoding": "gzip, deflate",
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify(message),
-      //   });
-      // }
-
-      // res.status(201).json(notification);
     } catch (error) {
       next(error);
     }

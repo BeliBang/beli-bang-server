@@ -73,7 +73,7 @@ class storeControllers {
   static async createStore(req, res, next) {
     try {
       const { name, description, imgUrl: imageUrl } = req.body;
-      
+
       const store = await Store.findOne({ where: { UserId: req.user.id } });
       if (store) {
         throw { status: 401, message: "You already have a store" };
@@ -84,8 +84,8 @@ class storeControllers {
         imageUrl,
         description,
         UserId: req.user.id,
-      })
-      res.status(201).json({ message: "Success creating store" }); 
+      });
+      res.status(201).json({ message: "Success creating store" });
     } catch (error) {
       next(error);
     }
@@ -93,12 +93,25 @@ class storeControllers {
 
   static async updateStore(req, res, next) {
     try {
-      const { name, description, status, imgUrl: imageUrl } = req.body;
+      const { name, description, imgUrl: imageUrl } = req.body;
       const { id } = req.params;
 
-      await Store.update({ name, description, status, imageUrl }, { where: { id } });
-      
+      await Store.update({ name, description, imageUrl }, { where: { id } });
+
       res.status(200).json({ message: "Success updating store information" });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async updateStatusStore(req, res, next) {
+    try {
+      const { status } = req.body;
+      const { id } = req.params;
+
+      await Store.update({ status }, { where: { id } });
+
+      res.status(200).json({ message: "Success updating store status" });
     } catch (error) {
       next(error);
     }

@@ -476,7 +476,7 @@ describe("When imagekit throws error", () => {
     })
   })
 
-  // UPDATE STORE
+  // UPDATE STORE 
   describe("PUT /stores/:id", () => {
     test("401 update Store with invalid token", (done) => {
       request(app)
@@ -633,6 +633,108 @@ describe("When imagekit throws error", () => {
 
           expect(status).toBe(200)
           expect(body).toHaveProperty("message", "Success updating store information")
+          done()
+        })
+        .catch((err) => {
+          done(err)
+        })
+    })
+  })
+
+  // UPDATE STORE STATUS
+  describe("PATCH /stores/:id", () => {
+    test("401 update status Store with invalid token", (done) => {
+      request(app)
+        .patch(`/stores/${storeId}`)
+        .set("access_token", invalidToken)
+        .then((response) => {
+          const { body, status } = response
+
+          expect(status).toBe(401);
+          expect(body).toHaveProperty("message", "Invalid token");
+          done()
+        })
+        .catch((err) => {
+          done(err)
+        })
+    })
+    
+    test("401 update Store without token", (done) => {
+      request(app)
+        .patch(`/stores/${storeId}`)
+        .then((response) => {
+          const { body, status } = response
+
+          expect(status).toBe(401);
+          expect(body).toHaveProperty("message", "Invalid token")
+          done()
+        })
+        .catch((err) => {
+          done(err)
+        })
+    })
+    
+    test("403 update Store without Seller role", (done) => {
+      request(app)
+        .patch(`/stores/${storeId}`)
+        .set("access_token", validCustomerToken1)
+        .then((response) => {
+          const { body, status } = response
+
+          expect(status).toBe(403);
+          expect(body).toHaveProperty("message", "Forbidden for the owner")
+          done()
+        })
+        .catch((err) => {
+          done(err)
+        })
+    })
+    
+    test("403 update Store with incorrect User ID", (done) => {
+      request(app)
+        .patch(`/stores/${storeId}`)
+        .set("access_token", validSellerToken2)
+        .then((response) => {
+          const { body, status } = response
+
+          expect(status).toBe(403);
+          expect(body).toHaveProperty("message", "Forbidden for the owner")
+          done()
+        })
+        .catch((err) => {
+          done(err)
+        })
+    })
+
+    test("404 update Store not in Database", (done) => {
+      request(app)
+        .patch("/stores/99")
+        .set("access_token", validSellerToken1)
+        .field( "name", "Store2" )
+        .field( "status", false )
+        .field( "description", "Description2" )
+        .then((response) => {
+          const { body, status } = response
+
+          expect(status).toBe(404);
+          expect(body).toHaveProperty("message", "Store Not Found")
+          done()
+        })
+        .catch((err) => {
+          done(err)
+        })
+    })
+
+    test("200 success UPDATE Store by ID", (done) => {
+      request(app)
+        .patch(`/stores/${storeId}`)
+        .set("access_token", validSellerToken1)
+        .field( "status", true )
+        .then((response) => {
+          const { body, status } = response
+
+          expect(status).toBe(200)
+          expect(body).toHaveProperty("message", "Success updating store status")
           done()
         })
         .catch((err) => {

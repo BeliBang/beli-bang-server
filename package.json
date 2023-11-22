@@ -4,7 +4,7 @@
   "description": "beli-bang-server",
   "main": "index.js",
   "scripts": {
-    "test": "jest --detectOpenHandles --verbose --coverage",
+    "test": "jest --verbose --coverage --runInBand",
     "quick_test": "jest --runInBand --forceExit",
     "dev": "npx nodemon bin/www"
   },

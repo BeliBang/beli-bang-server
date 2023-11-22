@@ -1,6 +1,4 @@
 async function errorHandling(error, req, res, next) {
-  console.log(error);
-  console.log(">>>>>>>>>>>>");
   let message = error.message || "Internal Server Error";
   let status = error.status || 500;
 

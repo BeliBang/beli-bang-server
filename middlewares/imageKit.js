@@ -23,16 +23,13 @@ module.exports = function (req, res, next) {
         fileName: req.file.originalname, //required
       })
       .then((response) => {
-        console.log({response}, "<<<<<<<");
         req.body.imgUrl = response.url;
         next();
     })
     .catch((error) => {
-          console.log(error, "<<<<<<<");
         next(createError(500, error.message));
       });
   } else {
-    console.log("test");
     const message = "Image must be provided";
     next(createError(400, message));
   }
