@@ -8,7 +8,7 @@
     "phoneNumber": "08123456789",
     "address": "Jl. Mangga",
     "profilePicture": "https://ik.imagekit.io/1h2qj6l0s/Foto/1513936660062.jpg?updatedAt=1700648251824",
-    "location": "POINT(106.962007 -6.226963)"
+    "location": "POINT(106.9489461689263 -6.340747845564586)"
   },
   {
     "id": 2,
@@ -19,7 +19,7 @@
     "phoneNumber": "08123456789",
     "address": "Jl. Alpukat",
     "profilePicture": "https://ik.imagekit.io/1h2qj6l0s/Foto/1513936660062.jpg?updatedAt=1700648251824",
-    "location": "POINT(106.961714 -6.227430)"
+    "location": "POINT(106.949988512018 -6.34265173942114)"
   },
   {
     "id": 3,
@@ -30,7 +30,7 @@
     "phoneNumber": "08123456789",
     "address": "Jl. Anggur",
     "profilePicture": "https://ik.imagekit.io/1h2qj6l0s/Foto/syon.png?updatedAt=1700648183993",
-    "location": "POINT(106.961103 -6.227218)"
+    "location": "POINT(106.94755229859032 -6.347600027004501)"
   },
   {
     "id": 4,
@@ -41,7 +41,7 @@
     "phoneNumber": "08123456789",
     "address": "Jl. Pisang",
     "profilePicture": "https://ik.imagekit.io/1h2qj6l0s/Foto/syon.png?updatedAt=1700648183993",
-    "location": "POINT(106.960020 -6.226938)"
+    "location": "POINT(106.94303191038082 -6.3464135245727915)"
   },
   {
     "id": 5,
@@ -52,7 +52,7 @@
     "phoneNumber": "08123456789",
     "address": "Jl. Pisang",
     "profilePicture": "https://ik.imagekit.io/1h2qj6l0s/Foto/syon.png?updatedAt=1700648183993",
-    "location": "POINT(106.960000 -6.227792)"
+    "location": "POINT(106.94303191038082 -6.3464135245727915)"
   },
   {
     "id": 6,
